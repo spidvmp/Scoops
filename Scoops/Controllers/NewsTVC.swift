@@ -29,23 +29,29 @@ class NewsTVC: UITableViewController {
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return 20
     }
 
-    /*
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("NewsCell", forIndexPath: indexPath)
 
-        // Configure the cell...
+        cell.textLabel!.text = "Noticia \(indexPath.row)"
+        cell.detailTextLabel!.text = "by Me"
 
         return cell
     }
-    */
+    
+//    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+//        print("seleccionan el \(indexPath.row)")
+//        performSegueWithIdentifier("showNewsDetail", sender: indexPath.row)
+//    }
+    
 
     /*
     // Override to support conditional editing of the table view.
@@ -82,14 +88,20 @@ class NewsTVC: UITableViewController {
     }
     */
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        
+        if segue.identifier == "showNewsDetail" {
+            
+            let detail = segue.destinationViewController as? ReportVC
+            let ip = self.tableView.indexPathForSelectedRow!.row
+            detail?.model = ip
+        }
+
     }
-    */
+    
 
 }
