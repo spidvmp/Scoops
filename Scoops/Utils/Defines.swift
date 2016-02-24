@@ -9,6 +9,15 @@
 
 
 //definiciones para conexion con Azure
-let kEndpointMobileService = "https://mivideoblogspidvmp.azure-mobile.net/"
-let kAppKeyMobileService = "CYTXdWuRgsbRoBhZzPJBdMKoSVeZMH52"
-let kEndpointAzureStorage = "https://videoblogapp.blob.core.windows.net"
+let kEndpointMobileService = "https://scoopsspidvmp.azure-mobile.net/"
+let kAppKeyMobileService = "zVKmUAIiFxyqaoNXdFpJltFfvXphJe87"
+//let kEndpointAzureStorage = "https://videoblogapp.blob.core.windows.net"
+
+//metodos para obtener el cliente de conexion con Azure
+func getMSClient() -> MSClient {
+    return MSClient(
+        applicationURLString: kEndpointMobileService,
+        applicationKey: kAppKeyMobileService
+    )
+}
+

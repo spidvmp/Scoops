@@ -11,6 +11,7 @@
 *.lock
 profile
 Breakpoints_v2.xcbkptlist
+AzureConfig.rtf
 
 
 ####

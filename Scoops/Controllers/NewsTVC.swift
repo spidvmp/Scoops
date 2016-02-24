@@ -14,6 +14,9 @@ class NewsTVC: UITableViewController {
     
     //utilizo esta tabla para mostrar las publicaciones de todos y mis publicaciones. Eso lo selecciono segun tenga este bool y se cargan los datos del modelo con unos valores u otros y se reload la tabla, por defecto se muestran las noticias, asi que soy lector
     var iAmReader : Bool = true
+    
+    //como voy con la mierda del storyboard, no puedo pasar el cliente, lo vuelvo a generar, deberia dar lo mismo
+    var client = getMSClient()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,6 +66,39 @@ class NewsTVC: UITableViewController {
 
         return cell
     }
+    
+    //MARK: - Obtencion de datos
+//    func populateModel(){
+//        
+//        let tablaVideos = client.tableWithName("Noticias")
+//        
+//        // prueba 1: obtener datos via MSTable
+//        
+//        //        tablaVideos?.readWithCompletion({ (result:MSQueryResult?, error:NSError?) -> Void in
+//        //
+//        //            if error == nil {
+//        //                self.model = result?.items
+//        //                self.tableView.reloadData()
+//        //            }
+//        //
+//        //        })
+//        
+//        // prueba 2: Obtener datos via MSQuery
+//        
+//        let query = MSQuery(table: tablaVideos)
+//        
+//        // Incluir predicados, constrains para filtrar, para limitar el numero de filas o delimitar el numero de columnas
+//        
+//        query.orderByAscending("titulo")
+//        query.readWithCompletion { (result:MSQueryResult?, error:NSError?) -> Void in
+//            if error == nil {
+//                self.model = result?.items
+//                self.tableView.reloadData()
+//            }
+//        }
+//        
+//        
+//    }
     
 //    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
 //        print("seleccionan el \(indexPath.row)")
