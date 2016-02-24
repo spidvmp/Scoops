@@ -12,7 +12,13 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    
+    //genero las credenciales para conectarme a Azure
+//    let client = MSClient(
+//        applicationURLString: kEndpointMobileService,
+//        applicationKey: kAppKeyMobileService
+//    )
+    
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
