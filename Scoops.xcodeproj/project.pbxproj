@@ -13,6 +13,8 @@
 		2B497A4C1C7DCF73007FA3CE /* Scoops.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2B497A4B1C7DCF73007FA3CE /* Scoops.storyboard */; };
 		2B497A4F1C7DCFB5007FA3CE /* NewsTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B497A4D1C7DCFB5007FA3CE /* NewsTVC.swift */; };
 		2B497A501C7DCFB5007FA3CE /* ReportVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B497A4E1C7DCFB5007FA3CE /* ReportVC.swift */; };
+		2B497A531C7DDB7A007FA3CE /* Azure Storage Client Library.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B497A521C7DDB7A007FA3CE /* Azure Storage Client Library.framework */; };
+		2B497A551C7DDBC2007FA3CE /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B497A541C7DDBC2007FA3CE /* libxml2.2.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,8 @@
 		2B497A4B1C7DCF73007FA3CE /* Scoops.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Scoops.storyboard; sourceTree = "<group>"; };
 		2B497A4D1C7DCFB5007FA3CE /* NewsTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewsTVC.swift; path = Controllers/NewsTVC.swift; sourceTree = "<group>"; };
 		2B497A4E1C7DCFB5007FA3CE /* ReportVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReportVC.swift; path = Controllers/ReportVC.swift; sourceTree = "<group>"; };
+		2B497A521C7DDB7A007FA3CE /* Azure Storage Client Library.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Azure Storage Client Library.framework"; path = "../Azure Storage Client Library.framework"; sourceTree = "<group>"; };
+		2B497A541C7DDBC2007FA3CE /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +35,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2B497A551C7DDBC2007FA3CE /* libxml2.2.tbd in Frameworks */,
+				2B497A531C7DDB7A007FA3CE /* Azure Storage Client Library.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -62,6 +68,7 @@
 				2B497A4B1C7DCF73007FA3CE /* Scoops.storyboard */,
 				2B497A421C7DCF13007FA3CE /* LaunchScreen.storyboard */,
 				2B497A451C7DCF13007FA3CE /* Info.plist */,
+				2B497A561C7DDBD4007FA3CE /* Frameworks */,
 			);
 			path = Scoops;
 			sourceTree = "<group>";
@@ -73,6 +80,15 @@
 				2B497A4E1C7DCFB5007FA3CE /* ReportVC.swift */,
 			);
 			name = Controllers;
+			sourceTree = "<group>";
+		};
+		2B497A561C7DDBD4007FA3CE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2B497A541C7DDBC2007FA3CE /* libxml2.2.tbd */,
+				2B497A521C7DDB7A007FA3CE /* Azure Storage Client Library.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -251,6 +267,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = Scoops/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Nicatec.Scoops;
@@ -262,6 +282,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = Scoops/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Nicatec.Scoops;

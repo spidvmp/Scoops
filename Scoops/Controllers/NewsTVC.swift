@@ -9,6 +9,11 @@
 import UIKit
 
 class NewsTVC: UITableViewController {
+    
+    @IBOutlet weak var readerButton: UIBarButtonItem!
+    
+    //utilizo esta tabla para mostrar las publicaciones de todos y mis publicaciones. Eso lo selecciono segun tenga este bool y se cargan los datos del modelo con unos valores u otros y se reload la tabla, por defecto se muestran las noticias, asi que soy lector
+    var iAmReader : Bool = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,6 +23,18 @@ class NewsTVC: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        //compruebo el valor de iAmReader para poner el texto que corresponda
+        if iAmReader {
+            //pongo la opcion para irse a escritor
+            self.readerButton.title = "Escribir"
+        } else {
+            self.readerButton.title = "Noticias"
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -88,6 +105,23 @@ class NewsTVC: UITableViewController {
     }
     */
 
+    //MARK: - Actions
+    
+    @IBAction func SwapBetweenReaderAndWriter(sender: AnyObject) {
+        
+        
+        
+        //cambio el valor del lector
+        iAmReader = !iAmReader
+        
+        //compruebo el valor de iAmReader para poner el texto que corresponda
+        if iAmReader {
+            //pongo la opcion para irse a escritor
+            self.readerButton.title = "Escribir"
+        } else {
+            self.readerButton.title = "Noticias"
+        }
+    }
     
     // MARK: - Navigation
 
