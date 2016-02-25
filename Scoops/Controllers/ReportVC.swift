@@ -11,7 +11,7 @@ import UIKit
 class ReportVC: UIViewController {
     
     //modelo de noticia que se ha seleccionado
-    var model : Int! = 0
+    var model : AnyObject = []
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -60,7 +60,13 @@ class NewsTVC: UITableViewController {
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 20
+        if let model = model {
+            return model.count
+        } else {
+            return 0
+        }
+        //return (model?.count)!
+        //return 20
     }
 
     
@@ -69,8 +75,9 @@ class NewsTVC: UITableViewController {
 
         //obtengo la noticia
         let news = model![indexPath.row]
-        cell.textLabel!.text = "Noticia \(indexPath.row)"
-        cell.detailTextLabel!.text = "by Me"
+        //cell.textLabel!.text = "Noticia \(indexPath.row)"
+        cell.textLabel!.text = news["titulo"] as? String
+        cell.detailTextLabel!.text = news["autor"] as? String
 
         return cell
     }
@@ -79,30 +86,37 @@ class NewsTVC: UITableViewController {
     func populateModel(){
         
         let tablaNoticias = client.tableWithName("Noticias")
+        print("hay que ordenar el POPULATE")
         
-        // prueba 1: obtener datos via MSTable
-        
-        //        tablaVideos?.readWithCompletion({ (result:MSQueryResult?, error:NSError?) -> Void in
-        //
-        //            if error == nil {
-        //                self.model = result?.items
-        //                self.tableView.reloadData()
-        //            }
-        //
-        //        })
-        
-        // prueba 2: Obtener datos via MSQuery
-        
-        let query = MSQuery(table: tablaNoticias)
-        
-        // Incluir predicados, constrains para filtrar, para limitar el numero de filas o delimitar el numero de columnas
-        
-        query.orderByAscending("titulo")
-        query.readWithCompletion { (result:MSQueryResult?, error:NSError?) -> Void in
-            if error == nil {
-                self.model = result?.items
-                self.tableView.reloadData()
+        //segun sea iAmReader hace una bisqueda o hace otra diferente
+        if iAmReader {
+            
+            let query = MSQuery(table: tablaNoticias)
+            
+            // Incluir predicados, constrains para filtrar, para limitar el numero de filas o delimitar el numero de columnas
+            
+            query.orderByAscending("titulo")
+            query.readWithCompletion { (result:MSQueryResult?, error:NSError?) -> Void in
+                if error == nil {
+                    self.model = result?.items
+                    self.tableView.reloadData()
+                }
             }
+        } else {
+            let query = MSQuery(table: tablaNoticias)
+            
+            // Incluir predicados, constrains para filtrar, para limitar el numero de filas o delimitar el numero de columnas
+            
+            query.orderByAscending("titulo")
+            query.readWithCompletion { (result:MSQueryResult?, error:NSError?) -> Void in
+                if error == nil {
+                    self.model = result?.items
+                    self.tableView.reloadData()
+                }
+            }
+            
+            
+            
         }
         
         
@@ -178,7 +192,7 @@ class NewsTVC: UITableViewController {
             
             let detail = segue.destinationViewController as? ReportVC
             let ip = self.tableView.indexPathForSelectedRow!.row
-            detail?.model = ip
+            detail?.model = model![ip] as AnyObject
         }
 
     }
