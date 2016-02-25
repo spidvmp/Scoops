@@ -17,6 +17,9 @@ class NewsTVC: UITableViewController {
     
     //como voy con la mierda del storyboard, no puedo pasar el cliente, lo vuelvo a generar, deberia dar lo mismo
     var client = getMSClient()
+    
+    //array del modelo de datos
+    var model: [AnyObject]?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +29,9 @@ class NewsTVC: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        
+        //cargo los datos par ala primera vez
+        populateModel()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -61,6 +67,8 @@ class NewsTVC: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("NewsCell", forIndexPath: indexPath)
 
+        //obtengo la noticia
+        let news = model![indexPath.row]
         cell.textLabel!.text = "Noticia \(indexPath.row)"
         cell.detailTextLabel!.text = "by Me"
 
@@ -68,37 +76,37 @@ class NewsTVC: UITableViewController {
     }
     
     //MARK: - Obtencion de datos
-//    func populateModel(){
-//        
-//        let tablaVideos = client.tableWithName("Noticias")
-//        
-//        // prueba 1: obtener datos via MSTable
-//        
-//        //        tablaVideos?.readWithCompletion({ (result:MSQueryResult?, error:NSError?) -> Void in
-//        //
-//        //            if error == nil {
-//        //                self.model = result?.items
-//        //                self.tableView.reloadData()
-//        //            }
-//        //
-//        //        })
-//        
-//        // prueba 2: Obtener datos via MSQuery
-//        
-//        let query = MSQuery(table: tablaVideos)
-//        
-//        // Incluir predicados, constrains para filtrar, para limitar el numero de filas o delimitar el numero de columnas
-//        
-//        query.orderByAscending("titulo")
-//        query.readWithCompletion { (result:MSQueryResult?, error:NSError?) -> Void in
-//            if error == nil {
-//                self.model = result?.items
-//                self.tableView.reloadData()
-//            }
-//        }
-//        
-//        
-//    }
+    func populateModel(){
+        
+        let tablaNoticias = client.tableWithName("Noticias")
+        
+        // prueba 1: obtener datos via MSTable
+        
+        //        tablaVideos?.readWithCompletion({ (result:MSQueryResult?, error:NSError?) -> Void in
+        //
+        //            if error == nil {
+        //                self.model = result?.items
+        //                self.tableView.reloadData()
+        //            }
+        //
+        //        })
+        
+        // prueba 2: Obtener datos via MSQuery
+        
+        let query = MSQuery(table: tablaNoticias)
+        
+        // Incluir predicados, constrains para filtrar, para limitar el numero de filas o delimitar el numero de columnas
+        
+        query.orderByAscending("titulo")
+        query.readWithCompletion { (result:MSQueryResult?, error:NSError?) -> Void in
+            if error == nil {
+                self.model = result?.items
+                self.tableView.reloadData()
+            }
+        }
+        
+        
+    }
     
 //    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
 //        print("seleccionan el \(indexPath.row)")
@@ -157,6 +165,8 @@ class NewsTVC: UITableViewController {
         } else {
             self.readerButton.title = "Noticias"
         }
+        //He de recargar la tabla xq hay que cambiar los datos, sera o las noticias o mis noticas escritas
+        populateModel()
     }
     
     // MARK: - Navigation
