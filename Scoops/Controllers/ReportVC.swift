@@ -10,6 +10,12 @@ import UIKit
 
 class ReportVC: UIViewController {
     
+    @IBOutlet weak var foto: UIImageView!
+    @IBOutlet weak var tituloTF: UITextField!
+    @IBOutlet weak var textoTV: UITextView!
+    @IBOutlet weak var boton: UIButton!
+    
+    
     //modelo de noticia que se ha seleccionado
     var model : AnyObject = []
 
@@ -27,6 +33,14 @@ class ReportVC: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         print("seleccionado el \(model)")
+        updateUI()
+    }
+    
+    func updateUI(){
+        self.tituloTF!.text = model["titulo"] as? String
+        self.textoTV!.text = model["texto"] as? String
     }
 
+    @IBAction func clickButton(sender: AnyObject) {
+    }
 }
