@@ -44,6 +44,10 @@ class ReportVC: UIViewController {
         if let _ = model {
             //hay contenido
             isEditingNews = true
+            self.boton.titleLabel!.text = "Publicar"
+        } else {
+            //es nueva noticia
+            self.boton.titleLabel!.text = "Subir noticia"
         }
         updateUI()
     }
@@ -54,6 +58,7 @@ class ReportVC: UIViewController {
         self.textoTV!.text = model!["texto"] as? String
         } else {
             self.tituloTF!.placeholder = "Titulo"
+            self.textoTV!.text = ""
             
         }
     }
@@ -64,7 +69,14 @@ class ReportVC: UIViewController {
             //tengo que actualizar
         } else {
             //es nuevo, inserto
-            
+            let tablaNoticias = client.tableWithName("Noticias")
+            tablaNoticias?.insert(["titulo": tituloTF.text!, "text": textoTV.text], completion: { (inserted, error: NSError?) -> Void in
+                if error != nil {
+                    print ("Error al insertar noticia: \(error)")
+                }
+            })
+            //salgo de aqui
+            self.navigationController?.popViewControllerAnimated(true)
         }
     }
     

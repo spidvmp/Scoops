@@ -87,33 +87,36 @@
                                     <constraint firstAttribute="height" constant="150" id="aoZ-mT-gfI"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Titulo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aFK-O5-ENF">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Titulo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aFK-O5-ENF">
                                 <rect key="frame" x="187" y="84" width="393" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="NcL-R2-ywK">
                                 <rect key="frame" x="20" y="248" width="560" height="332"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <mutableString key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis ostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</mutableString>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="n91-zu-4XG">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="n91-zu-4XG">
                                 <rect key="frame" x="187" y="113" width="393" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q4h-tC-VPh">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q4h-tC-VPh">
                                 <rect key="frame" x="187" y="151" width="393" height="30"/>
-                                <state key="normal" title="Button"/>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Button">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
                                 <connections>
                                     <action selector="clickButton:" destination="Wtw-xF-Vaj" eventType="touchUpInside" id="vNf-hD-inb"/>
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="0.36460037319999999" blue="0.36456224700000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="aFK-O5-ENF" secondAttribute="trailing" id="57A-m3-yDV"/>
                             <constraint firstItem="n91-zu-4XG" firstAttribute="leading" secondItem="aFK-O5-ENF" secondAttribute="leading" id="5Zu-3y-1Gf"/>
@@ -121,10 +124,13 @@
                             <constraint firstItem="aFK-O5-ENF" firstAttribute="leading" secondItem="uMP-SQ-oQ9" secondAttribute="trailing" constant="17" id="CbQ-jh-8KQ"/>
                             <constraint firstItem="Rc3-29-Pqq" firstAttribute="top" secondItem="NcL-R2-ywK" secondAttribute="bottom" constant="20" id="Kbz-8X-pw8"/>
                             <constraint firstItem="NcL-R2-ywK" firstAttribute="top" secondItem="uMP-SQ-oQ9" secondAttribute="bottom" constant="14" id="Ku3-Eu-MXh"/>
+                            <constraint firstItem="aFK-O5-ENF" firstAttribute="top" secondItem="uMP-SQ-oQ9" secondAttribute="top" id="L1D-cU-Wqz"/>
                             <constraint firstItem="q4h-tC-VPh" firstAttribute="leading" secondItem="aFK-O5-ENF" secondAttribute="leading" id="SJ5-fO-R2b"/>
                             <constraint firstItem="q4h-tC-VPh" firstAttribute="trailing" secondItem="aFK-O5-ENF" secondAttribute="trailing" id="eB7-kq-KbP"/>
                             <constraint firstItem="n91-zu-4XG" firstAttribute="trailing" secondItem="aFK-O5-ENF" secondAttribute="trailing" id="hfg-M9-t6n"/>
+                            <constraint firstItem="n91-zu-4XG" firstAttribute="top" secondItem="aFK-O5-ENF" secondAttribute="bottom" constant="8" id="iEi-0N-Cv6"/>
                             <constraint firstAttribute="leadingMargin" secondItem="uMP-SQ-oQ9" secondAttribute="leading" id="qzU-Yj-2ni"/>
+                            <constraint firstItem="q4h-tC-VPh" firstAttribute="top" secondItem="n91-zu-4XG" secondAttribute="bottom" constant="8" id="t8h-cY-aO0"/>
                             <constraint firstItem="uMP-SQ-oQ9" firstAttribute="top" secondItem="gfW-Iv-Egt" secondAttribute="bottom" constant="20" id="ucJ-40-zTg"/>
                             <constraint firstItem="NcL-R2-ywK" firstAttribute="trailing" secondItem="aFK-O5-ENF" secondAttribute="trailing" id="yQq-DK-Xuw"/>
                         </constraints>

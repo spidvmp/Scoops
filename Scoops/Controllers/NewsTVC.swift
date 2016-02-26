@@ -30,8 +30,7 @@ class NewsTVC: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
-        //cargo los datos par ala primera vez
-        populateModel()
+        
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -44,6 +43,9 @@ class NewsTVC: UITableViewController {
         } else {
             self.readerButton.title = "Noticias"
         }
+        
+        //cargo los datos par ala primera vez, no es la mejor forma de hacerlo, pero eso ahroa no importa
+        populateModel()
     }
 
     override func didReceiveMemoryWarning() {
