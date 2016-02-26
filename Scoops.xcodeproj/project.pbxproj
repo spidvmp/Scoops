@@ -18,6 +18,7 @@
 		2B497A501C7DCFB5007FA3CE /* ReportVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B497A4E1C7DCFB5007FA3CE /* ReportVC.swift */; };
 		2B497A531C7DDB7A007FA3CE /* Azure Storage Client Library.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B497A521C7DDB7A007FA3CE /* Azure Storage Client Library.framework */; };
 		2B497A551C7DDBC2007FA3CE /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B497A541C7DDBC2007FA3CE /* libxml2.2.tbd */; };
+		2BF159911C808863004AC035 /* emptyPic.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2BF159901C808863004AC035 /* emptyPic.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,7 @@
 		2B497A4E1C7DCFB5007FA3CE /* ReportVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReportVC.swift; path = Controllers/ReportVC.swift; sourceTree = "<group>"; };
 		2B497A521C7DDB7A007FA3CE /* Azure Storage Client Library.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Azure Storage Client Library.framework"; path = "../Azure Storage Client Library.framework"; sourceTree = "<group>"; };
 		2B497A541C7DDBC2007FA3CE /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
+		2BF159901C808863004AC035 /* emptyPic.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = emptyPic.jpg; path = Utils/emptyPic.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +56,7 @@
 		2B31A4661C7E1AAC007FBFA3 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				2BF159901C808863004AC035 /* emptyPic.jpg */,
 				2B31A4641C7E1AA8007FBFA3 /* Defines.swift */,
 			);
 			name = Utils;
@@ -179,6 +182,7 @@
 			files = (
 				2B497A441C7DCF13007FA3CE /* LaunchScreen.storyboard in Resources */,
 				2B497A411C7DCF13007FA3CE /* Assets.xcassets in Resources */,
+				2BF159911C808863004AC035 /* emptyPic.jpg in Resources */,
 				2B497A4C1C7DCF73007FA3CE /* Scoops.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

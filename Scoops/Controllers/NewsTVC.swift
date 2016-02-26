@@ -193,6 +193,9 @@ class NewsTVC: UITableViewController {
             let detail = segue.destinationViewController as? ReportVC
             let ip = self.tableView.indexPathForSelectedRow!.row
             detail?.model = model![ip] as AnyObject
+        } else if segue.identifier == "addNewNews" {
+            let detail = segue.destinationViewController as? ReportVC
+            detail?.model = nil
         }
 
     }
