@@ -90,13 +90,13 @@ class NewsTVC: UITableViewController {
         let tablaNoticias = client.tableWithName("Noticias")
         print("hay que ordenar el POPULATE")
         
-        //segun sea iAmReader hace una bisqueda o hace otra diferente
+        //segun sea iAmReader hace una busqueda o hace otra diferente
         if iAmReader {
-            
+            //soy lector, muestra todas la noticias que esten publicadas sea de quien sea
             let query = MSQuery(table: tablaNoticias)
             
             // Incluir predicados, constrains para filtrar, para limitar el numero de filas o delimitar el numero de columnas
-            
+            query.predicate = NSPredicate(format: "estado == 'P'")
             query.orderByAscending("titulo")
             query.readWithCompletion { (result:MSQueryResult?, error:NSError?) -> Void in
                 if error == nil {
@@ -110,6 +110,7 @@ class NewsTVC: UITableViewController {
             // Incluir predicados, constrains para filtrar, para limitar el numero de filas o delimitar el numero de columnas
             
             query.orderByAscending("titulo")
+            
             query.readWithCompletion { (result:MSQueryResult?, error:NSError?) -> Void in
                 if error == nil {
                     self.model = result?.items
@@ -138,17 +139,30 @@ class NewsTVC: UITableViewController {
     }
     */
 
-    /*
-    // Override to support editing the table view.
+    
+    // MARK: - Borrar celdas
+    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        //si estoy en modo lector no puedo borrar cledas, ya que no son mias, es lo que esta publicado
+        if iAmReader {
+            return false
+        } else {
+            return true
+        }
+    }
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        //solo se puede eliminar si la noticia es mia y estoy en modo escritor, solo aparecen mis noticias
         if editingStyle == .Delete {
             // Delete the row from the data source
+            tableView.beginUpdates()
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+            model!.removeAtIndex(indexPath.row)
+            tableView.endUpdates()
+        }
+//        else if editingStyle == .Insert {
+//            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+//        }    
     }
-    */
+
 
     /*
     // Override to support rearranging the table view.

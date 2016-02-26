@@ -70,6 +70,7 @@ class ReportVC: UIViewController {
         } else {
             //es nuevo, inserto
             let tablaNoticias = client.tableWithName("Noticias")
+            
             tablaNoticias?.insert(["titulo": tituloTF.text!, "text": textoTV.text], completion: { (inserted, error: NSError?) -> Void in
                 if error != nil {
                     print ("Error al insertar noticia: \(error)")
