@@ -45,10 +45,12 @@ class ReportVC: UIViewController {
         if let _ = model {
             //hay contenido
             isEditingNews = true
-            self.boton.titleLabel!.text = "Publicar"
+            self.boton.enabled = false
+            self.publicarButton.enabled = true
         } else {
             //es nueva noticia
-            self.boton.titleLabel!.text = "Subir noticia"
+            self.boton.enabled = true
+            self.publicarButton.enabled = false
         }
         updateUI()
     }
@@ -66,9 +68,6 @@ class ReportVC: UIViewController {
 
     @IBAction func clickButton(sender: AnyObject) {
         //compruebo si tengo que insertar o actualizar
-        if isEditingNews {
-            //tengo que actualizar
-        } else {
             //es nuevo, inserto
             let tablaNoticias = client.tableWithName("Noticias")
             
@@ -77,9 +76,11 @@ class ReportVC: UIViewController {
                     print ("Error al insertar noticia: \(error)")
                 }
             })
-            //salgo de aqui
-            self.navigationController?.popViewControllerAnimated(true)
-        }
+        
+        //una vez que se ha subido,. ya permito publicar
+        self.boton.enabled = false
+        self.publicarButton.enabled = true
+
     }
     
     @IBAction func clickPublicar(sender: AnyObject) {
@@ -92,6 +93,9 @@ class ReportVC: UIViewController {
                 print ("Error al update noticia: \(error)")
             }
         })
+        
+        //ya eh puvlicado, ya no hago nada aqui, me piro
+        self.navigationController?.popViewControllerAnimated(true)
         
     }
     

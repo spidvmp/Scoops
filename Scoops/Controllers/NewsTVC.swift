@@ -91,28 +91,20 @@ class NewsTVC: UITableViewController {
     //MARK: - Obtencion de datos
     func populateModel(){
         
-        print("hay que ordenar el POPULATE")
+
         self.activityIndicator.startAnimating()
         self.navigationController?.navigationItem.titleView = self.activityIndicator
         let tablaNoticias = client.tableWithName("Noticias")
         let query = MSQuery(table: tablaNoticias)
-        //query.selectFields = ["titulo","autor","foto"]
+        query.selectFields = ["id","titulo","autor","fotoname"]
 
         
         //segun sea iAmReader hace una busqueda o hace otra diferente
         if iAmReader {
             //soy lector, muestra todas la noticias que esten publicadas sea de quien sea
-            
-            
-            // Incluir predicados, constrains para filtrar, para limitar el numero de filas o delimitar el numero de columnas
             query.predicate = NSPredicate(format: "estado == 'P'")
             query.orderByDescending("__createdAt")
-//            query.readWithCompletion { (result:MSQueryResult?, error:NSError?) -> Void in
-//                if error == nil {
-//                    self.model = result?.items
-//                    self.tableView.reloadData()
-//                }
-//            }
+
         } else {
             
             // Incluir predicados, constrains para filtrar, para limitar el numero de filas o delimitar el numero de columnas
