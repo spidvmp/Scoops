@@ -20,6 +20,10 @@ class NewsTVC: UITableViewController {
     
     //array del modelo de datos
     var model: [AnyObject]?
+    
+    
+    //activity indicator
+    let activityIndicator = UIActivityIndicatorView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,7 +43,7 @@ class NewsTVC: UITableViewController {
         //compruebo el valor de iAmReader para poner el texto que corresponda
         if iAmReader {
             //pongo la opcion para irse a escritor
-            self.readerButton.title = "Escribir"
+            self.readerButton.title = "Mis Noticias"
         } else {
             self.readerButton.title = "Noticias"
         }
@@ -87,41 +91,44 @@ class NewsTVC: UITableViewController {
     //MARK: - Obtencion de datos
     func populateModel(){
         
-        let tablaNoticias = client.tableWithName("Noticias")
         print("hay que ordenar el POPULATE")
+        self.activityIndicator.startAnimating()
+        self.navigationController?.navigationItem.titleView = self.activityIndicator
+        let tablaNoticias = client.tableWithName("Noticias")
+        let query = MSQuery(table: tablaNoticias)
+        //query.selectFields = ["titulo","autor","foto"]
+
         
         //segun sea iAmReader hace una busqueda o hace otra diferente
         if iAmReader {
             //soy lector, muestra todas la noticias que esten publicadas sea de quien sea
-            let query = MSQuery(table: tablaNoticias)
+            
             
             // Incluir predicados, constrains para filtrar, para limitar el numero de filas o delimitar el numero de columnas
             query.predicate = NSPredicate(format: "estado == 'P'")
-            query.orderByAscending("titulo")
-            query.readWithCompletion { (result:MSQueryResult?, error:NSError?) -> Void in
-                if error == nil {
-                    self.model = result?.items
-                    self.tableView.reloadData()
-                }
-            }
+            query.orderByDescending("__createdAt")
+//            query.readWithCompletion { (result:MSQueryResult?, error:NSError?) -> Void in
+//                if error == nil {
+//                    self.model = result?.items
+//                    self.tableView.reloadData()
+//                }
+//            }
         } else {
-            let query = MSQuery(table: tablaNoticias)
             
             // Incluir predicados, constrains para filtrar, para limitar el numero de filas o delimitar el numero de columnas
-            
             query.orderByAscending("titulo")
-            
-            query.readWithCompletion { (result:MSQueryResult?, error:NSError?) -> Void in
-                if error == nil {
-                    self.model = result?.items
-                    self.tableView.reloadData()
-                }
-            }
-            
-            
-            
+            query.predicate = NSPredicate(format: "estado == 'NP'")
         }
         
+        
+        query.readWithCompletion { (result:MSQueryResult?, error:NSError?) -> Void in
+            if error == nil {
+                self.model = result?.items
+                self.tableView.reloadData()
+                self.activityIndicator.stopAnimating()
+            }
+        }
+
         
     }
     
