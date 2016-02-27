@@ -144,17 +144,34 @@ class ReportVC: UIViewController {
     
     //MARK: - Actions
     func subirNoticia(sender: AnyObject) {
-            //es nuevo, inserto
-            let tablaNoticias = client.tableWithName("Noticias")
+        //primero compruebo si esta logado, ay que hemos cambiado que el insert solo acepta logados
+        if isUserloged() {
             
-            tablaNoticias?.insert(["titulo": tituloTF.text!, "texto": textoTV.text, "estado": "NP", "validacion":"0"], completion: { (inserted, error: NSError?) -> Void in
-                if error != nil {
-                    print ("Error al insertar noticia: \(error)")
-                }
-            })
-            //se ha subido la noticia, ahora queda la opcion de publicarla o no
-            self.menuItemButton!.title = "Publicar"
-            self.menuItemButton!.action = "clickPublicar"
+            //cargamos los datos del usuario
+            if let usrlogin = loadUserAuthInfo() {
+                //guardamos las cerdenciales de logado en client.currentUser
+                client.currentUser = MSUser(userId: usrlogin.usr)
+                client.currentUser.mobileServiceAuthenticationToken = usrlogin.tok
+                
+                //es nuevo, inserto
+                let tablaNoticias = client.tableWithName("Noticias")
+                
+                tablaNoticias?.insert(["titulo": tituloTF.text!, "texto": textoTV.text, "estado": "NP", "validacion":"0"], completion: { (inserted, error: NSError?) -> Void in
+                    if error != nil {
+                        print ("Error al insertar noticia: \(error)")
+                    }
+                })
+                //se ha subido la noticia, ahora queda la opcion de publicarla o no
+                self.menuItemButton!.title = "Publicar"
+                self.menuItemButton!.action = "clickPublicar"
+                
+            }
+            
+        } else {
+            //no estamos logados
+        }
+        
+        
         
 
     }

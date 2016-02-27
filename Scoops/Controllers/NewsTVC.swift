@@ -192,6 +192,7 @@ class NewsTVC: UITableViewController {
                     //guardamos las cerdenciales de logado en client.currentUser
                     client.currentUser = MSUser(userId: usrlogin.usr)
                     client.currentUser.mobileServiceAuthenticationToken = usrlogin.tok
+                    
                 }
                 
             } else {
