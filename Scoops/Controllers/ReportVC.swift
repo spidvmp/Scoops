@@ -19,7 +19,7 @@ class ReportVC: UIViewController {
     //conexion con azure
     let client = getMSClient()
     
-    //modelo de noticia que se ha seleccionado
+    //modelo de noticia que se ha seleccionado, pero viene capado, hay que volver a consultar todo el modelo completo
     var model : AnyObject?
     
     //me quedo con un bool para saber si es edicion o es uno mnuevo
@@ -28,7 +28,7 @@ class ReportVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+
 
         // Do any additional setup after loading the view.
     }
@@ -47,6 +47,24 @@ class ReportVC: UIViewController {
             isEditingNews = true
             self.boton.enabled = false
             self.publicarButton.enabled = true
+            //hay que recargar el modelo completo
+            let tablaNoticias = client.tableWithName("Noticias")
+            let query = MSQuery(table: tablaNoticias)
+            if let i = model!["id"] {
+                query.predicate = NSPredicate(format: "id == '\(i!)'")
+                query.readWithCompletion { (result:MSQueryResult?, error:NSError?) -> Void in
+                    if error == nil {
+                        self.model?.removeAllObjects()
+                        let r = result?.items
+                        self.model = r![0]
+                        
+                    } else {
+                        print("Error al recuperar el dato")
+                    }
+                    print(self.model)
+                    self.updateUI()
+                }
+            }
         } else {
             //es nueva noticia
             self.boton.enabled = true
@@ -57,8 +75,8 @@ class ReportVC: UIViewController {
     
     func updateUI(){
         if isEditingNews {
-        self.tituloTF!.text = model!["titulo"] as? String
-        self.textoTV!.text = model!["texto"] as? String
+            self.tituloTF!.text = model!["titulo"] as? String
+            self.textoTV!.text = model!["texto"] as? String
         } else {
             self.tituloTF!.placeholder = "Titulo"
             self.textoTV!.text = ""
