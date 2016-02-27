@@ -114,12 +114,12 @@ class ReportVC: UIViewController {
                         //no esta publicada, asi que boton con opcion a publicar
                         //se ha subido la noticia, ahora queda la opcion de publicarla o no
                         self.menuItemButton!.title = "Publicar"
-                        self.menuItemButton!.action = "clickPublicar"
+                        self.menuItemButton!.action = "clickPublicar:"
                     } else {
                         //esta publicada, asi que boton con opcion a borrar
                         //se ha subido la noticia, ahora queda la opcion de publicarla o no
                         self.menuItemButton!.title = "Borrar"
-                        self.menuItemButton!.action = "deleteNoticia"
+                        self.menuItemButton!.action = "deleteNoticia:"
                     }
                 }
             } else {
@@ -143,7 +143,7 @@ class ReportVC: UIViewController {
 
     
     //MARK: - Actions
-    @IBAction func subirNoticia(sender: AnyObject) {
+    func subirNoticia(sender: AnyObject) {
             //es nuevo, inserto
             let tablaNoticias = client.tableWithName("Noticias")
             
@@ -159,7 +159,7 @@ class ReportVC: UIViewController {
 
     }
     
-    @IBAction func clickPublicar(sender: AnyObject) {
+    func clickPublicar(sender: AnyObject) {
         //he de poner la notcia como publicar, he de modificar el estado de NP a P para el id xxxxx
         let tablaNoticias = client.tableWithName("Noticias")
         //modifico lo que hay que cambiar, que es el estado a "P"
@@ -175,7 +175,7 @@ class ReportVC: UIViewController {
         
     }
     
-    @IBAction func deleteNoticia(sender: AnyObject) {
+    func deleteNoticia(sender: AnyObject) {
         
         print("Elimino \(self.model)")
         //se borra, ya no pinto nada aqui
