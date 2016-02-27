@@ -26,7 +26,9 @@ class ReportVC: UIViewController {
     var model : AnyObject?
     
     //me quedo con un bool para saber si es edicion o es uno mnuevo
-    var isEditingNews : Bool = false
+    var isEditingNews : Bool! = false
+    //genero un boton que usare para subior la noticia o publicarla o borrarla
+    var menuItemButton : UIBarButtonItem?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,8 +49,6 @@ class ReportVC: UIViewController {
         //solo muestro los datos si me han llegado
         if let _ = model {
             //hay contenido
-            isEditingNews = true
-
             //hay que recargar el modelo completo
             let tablaNoticias = client.tableWithName("Noticias")
             let query = MSQuery(table: tablaNoticias)
@@ -68,41 +68,94 @@ class ReportVC: UIViewController {
                     self.updateUI()
                 }
             }
+            
+            //compruebo si es editable, por lo que hay que poner el boton
+            if self.isEditingNews == true {
+                self.menuItemButton = UIBarButtonItem(title: "Publicar", style: .Plain , target: self, action: "clickPublicar:" )
+                self.navigationItem.rightBarButtonItem = self.menuItemButton!
+                
+            }
         } else {
             //es nueva noticia
-
+            //he de poner el boon para subir, solo cuando es noticia mia
+            self.menuItemButton = UIBarButtonItem(title: "Subir Noticia", style: .Plain , target: self, action: "subirNoticia:" )
+            self.navigationItem.rightBarButtonItem = self.menuItemButton!
+            self.isEditingNews = true
         }
         updateUI()
     }
     
     func updateUI(){
-        if isEditingNews {
-            self.tituloTF!.text = model!["titulo"] as? String
-            self.textoTV!.text = model!["texto"] as? String
-            if let fotoName = model!["fotoname"] {
+        //si no tengo datos, es que es nueva noticia a redactar
+        if let model = model {
+            //tengo datos, los muestro
+            
+            self.tituloTF!.text = model["titulo"] as? String
+            self.textoTV!.text = model["texto"] as? String
+            self.autorLbl!.text = model["autor"] as? String
+            self.puntuacionLbl!.text = model["validacion"] as? String
+            
+            if let fotoName = model["fotoname"] {
                 //tengo imagen, me la tengo que bajar
             }
+            
+            //si estoy editando mi noticia:
+            if self.isEditingNews == true {
+                //es mi noticia y la estoy editando
+                //no me puedo votar
+                self.likeButton.enabled = false
+                self.disslikeButton.enabled = false
+                //si paso por aqui es que la noticia ya esta subida, compruebo si esta publicada o no para dar opcion a borrarla
+                //es posible que cuando se esta acargando, todavia no tengamos estado, asi que hay que comprobarlo
+
+                
+                if let estado = model["estado"]!  {
+                    if estado as! String == "NP" {
+                        //no esta publicada, asi que boton con opcion a publicar
+                        //se ha subido la noticia, ahora queda la opcion de publicarla o no
+                        self.menuItemButton!.title = "Publicar"
+                        self.menuItemButton!.action = "clickPublicar"
+                    } else {
+                        //esta publicada, asi que boton con opcion a borrar
+                        //se ha subido la noticia, ahora queda la opcion de publicarla o no
+                        self.menuItemButton!.title = "Borrar"
+                        self.menuItemButton!.action = "deleteNoticia"
+                    }
+                }
+            } else {
+                //estoy viendo la noticia de otro, la puedo votar
+                self.likeButton.enabled = true
+                self.disslikeButton.enabled = true
+            }
+            
         } else {
+            //es nuevo
             self.tituloTF!.placeholder = "Titulo"
             self.textoTV!.text = ""
+            self.puntuacionLbl!.text = ""
+            self.autorLbl!.text = ""
+            self.likeButton.enabled = false
+            self.disslikeButton.enabled = false
+            
             
         }
     }
 
     
     //MARK: - Actions
-    @IBAction func clickButton(sender: AnyObject) {
-        //compruebo si tengo que insertar o actualizar
+    @IBAction func subirNoticia(sender: AnyObject) {
             //es nuevo, inserto
             let tablaNoticias = client.tableWithName("Noticias")
             
-            tablaNoticias?.insert(["titulo": tituloTF.text!, "texto": textoTV.text, "estado": "NP"], completion: { (inserted, error: NSError?) -> Void in
+            tablaNoticias?.insert(["titulo": tituloTF.text!, "texto": textoTV.text, "estado": "NP", "validacion":"0"], completion: { (inserted, error: NSError?) -> Void in
                 if error != nil {
                     print ("Error al insertar noticia: \(error)")
                 }
             })
+            //se ha subido la noticia, ahora queda la opcion de publicarla o no
+            self.menuItemButton!.title = "Publicar"
+            self.menuItemButton!.action = "clickPublicar"
         
-
 
     }
     
@@ -122,11 +175,20 @@ class ReportVC: UIViewController {
         
     }
     
+    @IBAction func deleteNoticia(sender: AnyObject) {
+        
+        print("Elimino \(self.model)")
+        //se borra, ya no pinto nada aqui
+        self.navigationController?.popViewControllerAnimated(true)
+    }
+    
     //MARK: - Acceso a Azure
     
     @IBAction func likeAction(sender: AnyObject) {
+        print ("Like")
     }
     
     @IBAction func disslikeAction(sender: AnyObject) {
+        print("Disslike")
     }
 }

@@ -208,6 +208,14 @@ class NewsTVC: UITableViewController {
             let detail = segue.destinationViewController as? ReportVC
             let ip = self.tableView.indexPathForSelectedRow!.row
             detail?.model = model![ip] as AnyObject
+            //compruebo si estaba en la tabla de noticias o de escritor, para dar opcion a modificar o no
+            if iAmReader {
+                //son las noticias, solo puedo votar y no puedo editar
+                detail?.isEditingNews = false
+            } else {
+                //son mis noticias, las puedo modificar
+                detail?.isEditingNews = true
+            }
         } else if segue.identifier == "addNewNews" {
             let detail = segue.destinationViewController as? ReportVC
             detail?.model = nil
