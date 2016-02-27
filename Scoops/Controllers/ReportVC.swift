@@ -13,8 +13,11 @@ class ReportVC: UIViewController {
     @IBOutlet weak var foto: UIImageView!
     @IBOutlet weak var tituloTF: UITextField!
     @IBOutlet weak var textoTV: UITextView!
-    @IBOutlet weak var boton: UIButton!
-    @IBOutlet weak var publicarButton: UIButton!
+    @IBOutlet weak var autorLbl: UILabel!
+    @IBOutlet weak var puntuacionLbl: UILabel!
+    @IBOutlet weak var likeButton: UIButton!
+    @IBOutlet weak var disslikeButton: UIButton!
+  
     
     //conexion con azure
     let client = getMSClient()
@@ -45,8 +48,7 @@ class ReportVC: UIViewController {
         if let _ = model {
             //hay contenido
             isEditingNews = true
-            self.boton.enabled = false
-            self.publicarButton.enabled = true
+
             //hay que recargar el modelo completo
             let tablaNoticias = client.tableWithName("Noticias")
             let query = MSQuery(table: tablaNoticias)
@@ -55,6 +57,7 @@ class ReportVC: UIViewController {
                 query.readWithCompletion { (result:MSQueryResult?, error:NSError?) -> Void in
                     if error == nil {
                         self.model?.removeAllObjects()
+                        //esto me dvuelve un array de elementos, solo deberia haber 1, me quedo con el en un objeto, no en un array
                         let r = result?.items
                         self.model = r![0]
                         
@@ -67,8 +70,7 @@ class ReportVC: UIViewController {
             }
         } else {
             //es nueva noticia
-            self.boton.enabled = true
-            self.publicarButton.enabled = false
+
         }
         updateUI()
     }
@@ -77,6 +79,9 @@ class ReportVC: UIViewController {
         if isEditingNews {
             self.tituloTF!.text = model!["titulo"] as? String
             self.textoTV!.text = model!["texto"] as? String
+            if let fotoName = model!["fotoname"] {
+                //tengo imagen, me la tengo que bajar
+            }
         } else {
             self.tituloTF!.placeholder = "Titulo"
             self.textoTV!.text = ""
@@ -84,6 +89,8 @@ class ReportVC: UIViewController {
         }
     }
 
+    
+    //MARK: - Actions
     @IBAction func clickButton(sender: AnyObject) {
         //compruebo si tengo que insertar o actualizar
             //es nuevo, inserto
@@ -95,9 +102,7 @@ class ReportVC: UIViewController {
                 }
             })
         
-        //una vez que se ha subido,. ya permito publicar
-        self.boton.enabled = false
-        self.publicarButton.enabled = true
+
 
     }
     
@@ -119,4 +124,9 @@ class ReportVC: UIViewController {
     
     //MARK: - Acceso a Azure
     
+    @IBAction func likeAction(sender: AnyObject) {
+    }
+    
+    @IBAction func disslikeAction(sender: AnyObject) {
+    }
 }
