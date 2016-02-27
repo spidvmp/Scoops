@@ -44,6 +44,7 @@ class NewsTVC: UITableViewController {
         if iAmReader {
             //pongo la opcion para irse a escritor
             self.readerButton.title = "Mis Noticias"
+
         } else {
             self.readerButton.title = "Noticias"
         }
@@ -51,6 +52,8 @@ class NewsTVC: UITableViewController {
         //cargo los datos par ala primera vez, no es la mejor forma de hacerlo, pero eso ahroa no importa
         populateModel()
     }
+    
+
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -107,7 +110,7 @@ class NewsTVC: UITableViewController {
 
         } else {
             
-            // Incluir predicados, constrains para filtrar, para limitar el numero de filas o delimitar el numero de columnas
+            // Soy escrito, asi que tengo que estar logado para que muestre solo mis articulos
             query.orderByAscending("titulo")
             query.predicate = NSPredicate(format: "estado == 'NP'")
         }
@@ -180,6 +183,32 @@ class NewsTVC: UITableViewController {
 
     //MARK: - Actions
     
+    func logarse() {
+        //si soy escritor, tengo que estar logado, asi que lo compruebo y si no lo pido
+        if iAmReader == false {
+            //tengo que estar logadopara mostrar la tabla de mis noticias
+            if  isUserloged() {
+                if let usrlogin = loadUserAuthInfo() {
+                    //guardamos las cerdenciales de logado en client.currentUser
+                    client.currentUser = MSUser(userId: usrlogin.usr)
+                    client.currentUser.mobileServiceAuthenticationToken = usrlogin.tok
+                }
+                
+            } else {
+                client.loginWithProvider("facebook", controller: self, animated: true, completion: { (user: MSUser?, error: NSError?) -> Void in
+                    
+                    if (error != nil){
+                        print("Tenemos Problemas")
+                    } else{
+                        // Persistimos los credenciales del usuario
+                        saveAuthInfo(user)
+                    }
+                })
+                
+            }
+        }
+    }
+    
     @IBAction func SwapBetweenReaderAndWriter(sender: AnyObject) {
         
         
@@ -190,8 +219,9 @@ class NewsTVC: UITableViewController {
         //compruebo el valor de iAmReader para poner el texto que corresponda
         if iAmReader {
             //pongo la opcion para irse a escritor
-            self.readerButton.title = "Escribir"
+            self.readerButton.title = "Mis Noticias"
         } else {
+            logarse()
             self.readerButton.title = "Noticias"
         }
         //He de recargar la tabla xq hay que cambiar los datos, sera o las noticias o mis noticas escritas
