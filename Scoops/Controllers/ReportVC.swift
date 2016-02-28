@@ -153,6 +153,10 @@ class ReportVC: UIViewController {
                 client.currentUser = MSUser(userId: usrlogin.usr)
                 client.currentUser.mobileServiceAuthenticationToken = usrlogin.tok
                 
+                //aqui activo la posibilidad que ya le de a publicar, asi que los datos los meto en model, ya que si viene de un registro nuevo model es nil y eso no mola
+//                let m : [String: AnyObject]? = ["titulo": tituloTF.text!, "texto": textoTV.text!, "user": usrlogin.usr]
+//                model = m
+                
                 //es nuevo, inserto
                 let tablaNoticias = client.tableWithName("Noticias")
                 //estoy logado por cojones, asi que el numero de user lo grabo para saber cuales son mis publicaciones
@@ -161,9 +165,16 @@ class ReportVC: UIViewController {
                 tablaNoticias?.insert(["titulo": tituloTF.text!, "texto": textoTV.text, "estado": "NP", "user":usrlogin.usr], completion: { (inserted, error: NSError?) -> Void in
                     if error != nil {
                         print ("Error al insertar noticia: \(error)")
+                    } else {
+                        //ha insertado. deberia tener el id que ha puesto
+                        print("inserted: ",inserted)
+                        self.model = inserted
                     }
                 })
+                
                 //se ha subido la noticia, ahora queda la opcion de publicarla o no
+                
+                
                 self.menuItemButton!.title = "Publicar"
                 self.menuItemButton!.action = "clickPublicar:"
                 
@@ -182,9 +193,9 @@ class ReportVC: UIViewController {
     func clickPublicar(sender: AnyObject) {
         //he de poner la notcia como publicar, he de modificar el estado de NP a P para el id xxxxx
         let tablaNoticias = client.tableWithName("Noticias")
-        //modifico lo que hay que cambiar, que es el estado a "P"
 
-        tablaNoticias?.update(["id": model!["id"] as! String, "estado": "P"], completion: { (inserted, error: NSError?) -> Void in
+        //modifico lo que hay que cambiar, que es el estado a "P", pero como no debe aparece hasta que un Job lo actualice cada X tiempo lo pongo a "WP"
+        tablaNoticias?.update(["id": model!["id"] as! String, "estado": "WP"], completion: { (inserted, error: NSError?) -> Void in
             if error != nil {
                 print ("Error al update noticia: \(error)")
             }
