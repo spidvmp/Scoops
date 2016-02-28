@@ -164,7 +164,7 @@ class ReportVC: UIViewController {
                 })
                 //se ha subido la noticia, ahora queda la opcion de publicarla o no
                 self.menuItemButton!.title = "Publicar"
-                self.menuItemButton!.action = "clickPublicar"
+                self.menuItemButton!.action = "clickPublicar:"
                 
             }
             

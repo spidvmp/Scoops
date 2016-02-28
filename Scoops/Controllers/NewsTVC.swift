@@ -87,6 +87,7 @@ class NewsTVC: UITableViewController {
         //cell.textLabel!.text = "Noticia \(indexPath.row)"
         cell.textLabel!.text = news["titulo"] as? String
         cell.detailTextLabel!.text = news["autor"] as? String
+        
 
         return cell
     }

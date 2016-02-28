@@ -5,23 +5,32 @@
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
 
 \f0\fs24 \cf0 function insert(item, user, request) \{\
-    user.getIdentities(\{\
-        success: function (identities) \{\
-            var http = require('request');\
-            console.log('Identities: ', identities);\
-            var url = 'https://graph.facebook.com/me?fields=id,name&access_token=' +\
-                identities.facebook.accessToken;\
- \
-            var reqParams = \{ uri: url, headers: \{ Accept: 'application/json' \} \};\
-            http.get(reqParams, function (err, resp, body) \{\
-                var userData = JSON.parse(body);\
-                console.log('Logado -> ' + userData.name);\
-                //item es el registro que vamos a insertar, le incluimos el nombre del usuario facebook\
-                item.autor = userData.name;\
-                //inicializo el valor de validacion con 0\
-                item.validacion = 0;\
-                request.execute();\
-            \});\
-        \}\
-    \});\
+    \
+    //inicializo el valor de validacion con 0\
+    item.validacion = 0;\
+    \
+    if ( typeof item.autor == 'undefined' ) \{\
+        //no tenemos el nombre, lo vamos a buscar\
+        user.getIdentities(\{\
+            success: function (identities) \{\
+                var http = require('request');\
+                console.log('Identities: ', identities);\
+                var url = 'https://graph.facebook.com/me?fields=id,name&access_token=' +\
+                    identities.facebook.accessToken;\
+     \
+                var reqParams = \{ uri: url, headers: \{ Accept: 'application/json' \} \};\
+                http.get(reqParams, function (err, resp, body) \{\
+                    var userData = JSON.parse(body);\
+                    console.log('Logado -> ' + userData.name);\
+                    //item es el registro que vamos a insertar, le incluimos el nombre del usuario facebook\
+                    item.autor = userData.name;\
+                    \
+                    request.execute();\
+                \});\
+            \}\
+        \});\
+    \} else \{\
+        //tenemos el nombre, asi que no lo hemos buscado\
+        request.execute();\
+    \}\
 \}}
