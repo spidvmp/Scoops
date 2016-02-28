@@ -157,6 +157,7 @@ class ReportVC: UIViewController {
                 let tablaNoticias = client.tableWithName("Noticias")
                 //estoy logado por cojones, asi que el numero de user lo grabo para saber cuales son mis publicaciones
                 //no inseeto nada ane validacion, ya que siempre inicio con 0, asi que lo hago en el script de insertar
+                //queda el script preparado para que si envio el autor no lo vuelva a buscar, de momento no lo implemento por tiempo
                 tablaNoticias?.insert(["titulo": tituloTF.text!, "texto": textoTV.text, "estado": "NP", "user":usrlogin.usr], completion: { (inserted, error: NSError?) -> Void in
                     if error != nil {
                         print ("Error al insertar noticia: \(error)")
@@ -198,6 +199,13 @@ class ReportVC: UIViewController {
         
         print("Elimino \(self.model)")
         //se borra, ya no pinto nada aqui
+        deleteRecord(model!["id"] as! String, client: client)
+//        let tablaNoticias = client.tableWithName("Noticias")
+//        tablaNoticias?.delete(["id": model!["id"] as! String], completion: { (inserted, error: NSError?) -> Void in
+//            if error != nil {
+//                print("Error al borrar mi noticia: \(error)")
+//            }
+//        })
         self.navigationController?.popViewControllerAnimated(true)
     }
     

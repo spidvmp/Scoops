@@ -48,3 +48,13 @@ func isUserloged() -> Bool {
     
 }
 
+//metodos de manejo de la tabla
+func deleteRecord(id: String, client: MSClient) {
+    let tablaNoticias = client.tableWithName("Noticias")
+    tablaNoticias?.delete(["id": id], completion: { (inserted, error: NSError?) -> Void in
+        if error != nil {
+            print("Error al borrar mi noticia: \(error)")
+        }
+    })
+}
+

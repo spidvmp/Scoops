@@ -155,10 +155,17 @@ class NewsTVC: UITableViewController {
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         //solo se puede eliminar si la noticia es mia y estoy en modo escritor, solo aparecen mis noticias
         if editingStyle == .Delete {
+            
+            //lo elimino de Azure
+            let n = model![indexPath.row]
+            deleteRecord(n["id"] as! String, client: client)
+            
+            
             // Delete the row from the data source
             tableView.beginUpdates()
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
             model!.removeAtIndex(indexPath.row)
+            
             tableView.endUpdates()
         }
 //        else if editingStyle == .Insert {
