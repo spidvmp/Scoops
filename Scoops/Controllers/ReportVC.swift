@@ -155,8 +155,9 @@ class ReportVC: UIViewController {
                 
                 //es nuevo, inserto
                 let tablaNoticias = client.tableWithName("Noticias")
-                
-                tablaNoticias?.insert(["titulo": tituloTF.text!, "texto": textoTV.text, "estado": "NP", "validacion":"0"], completion: { (inserted, error: NSError?) -> Void in
+                //estoy logado por cojones, asi que el numero de user lo grabo para saber cuales son mis publicaciones
+                //no inseeto nada ane validacion, ya que siempre inicio con 0, asi que lo hago en el script de insertar
+                tablaNoticias?.insert(["titulo": tituloTF.text!, "texto": textoTV.text, "estado": "NP", "user":usrlogin.usr], completion: { (inserted, error: NSError?) -> Void in
                     if error != nil {
                         print ("Error al insertar noticia: \(error)")
                     }
@@ -169,6 +170,7 @@ class ReportVC: UIViewController {
             
         } else {
             //no estamos logados
+            
         }
         
         

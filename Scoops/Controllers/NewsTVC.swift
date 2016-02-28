@@ -112,7 +112,7 @@ class NewsTVC: UITableViewController {
             
             // Soy escrito, asi que tengo que estar logado para que muestre solo mis articulos
             query.orderByAscending("titulo")
-            query.predicate = NSPredicate(format: "estado == 'NP'")
+            query.predicate = NSPredicate(format: "user == '" + client.currentUser.userId + "'")
         }
         
         
