@@ -12,6 +12,7 @@
 let kEndpointMobileService = "https://scoopsspidvmp.azure-mobile.net/"
 let kAppKeyMobileService = "zVKmUAIiFxyqaoNXdFpJltFfvXphJe87"
 //let kEndpointAzureStorage = "https://videoblogapp.blob.core.windows.net"
+//let imageContainer  = "https://scoopsspidvmp.blob.core.windows.net/"
 
 //metodos para obtener el cliente de conexion con Azure
 func getMSClient() -> MSClient {

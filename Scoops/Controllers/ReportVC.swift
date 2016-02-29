@@ -29,6 +29,9 @@ class ReportVC: UIViewController {
     var isEditingNews : Bool! = false
     //genero un boton que usare para subior la noticia o publicarla o borrarla
     var menuItemButton : UIBarButtonItem?
+    
+    //tengo un gesto de tap en la foto para sacar foto. En caso de que este viendo la noticia como lector no puedo tocar la foto
+    var tapPic : UITapGestureRecognizer?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,7 +48,7 @@ class ReportVC: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        print("seleccionado el \(model)")
+        //print("seleccionado el \(model)")
         //solo muestro los datos si me han llegado
         if let _ = model {
             //hay contenido
@@ -74,6 +77,7 @@ class ReportVC: UIViewController {
                 self.menuItemButton = UIBarButtonItem(title: "Publicar", style: .Plain , target: self, action: "clickPublicar:" )
                 self.navigationItem.rightBarButtonItem = self.menuItemButton!
                 
+                
             }
         } else {
             //es nueva noticia
@@ -81,6 +85,11 @@ class ReportVC: UIViewController {
             self.menuItemButton = UIBarButtonItem(title: "Subir Noticia", style: .Plain , target: self, action: "subirNoticia:" )
             self.navigationItem.rightBarButtonItem = self.menuItemButton!
             self.isEditingNews = true
+            
+            //añado el yapgesture a la foto
+            self.tapPic = UITapGestureRecognizer(target: self, action: Selector("takeAPic:"))
+            self.foto.userInteractionEnabled = true
+            self.foto.addGestureRecognizer(tapPic!)
         }
         updateUI()
     }
@@ -105,6 +114,7 @@ class ReportVC: UIViewController {
                 //no me puedo votar
                 self.likeButton.enabled = false
                 self.disslikeButton.enabled = false
+
                 //si paso por aqui es que la noticia ya esta subida, compruebo si esta publicada o no para dar opcion a borrarla
                 //es posible que cuando se esta acargando, todavia no tengamos estado, asi que hay que comprobarlo
 
@@ -220,6 +230,21 @@ class ReportVC: UIViewController {
         self.navigationController?.popViewControllerAnimated(true)
     }
     
+    func takeAPic(sender: AnyObject){
+        print("take a pic")
+        let picker = UIImagePickerController()
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
+            //tenemos camara
+            picker.sourceType = .Camera
+        } else {
+            //no hay camara
+            picker.sourceType = .PhotoLibrary
+        }
+        
+        picker.delegate = self
+        picker.modalTransitionStyle = .CrossDissolve
+        self.presentViewController(picker, animated: true, completion: nil)
+    }
     //MARK: - Acceso a Azure
     
     @IBAction func likeAction(sender: AnyObject) {
@@ -229,4 +254,20 @@ class ReportVC: UIViewController {
     @IBAction func disslikeAction(sender: AnyObject) {
         print("Disslike")
     }
+}
+
+extension ReportVC : UIImagePickerControllerDelegate{
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
+        print("tenemos la imagen")
+        
+        self.foto.image = image
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    
+}
+
+extension ReportVC : UINavigationControllerDelegate {
+    
 }

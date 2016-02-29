@@ -8,7 +8,12 @@
 
 import UIKit
 
+
 class NewsTVC: UITableViewController {
+    
+    //storage, cuenta scoopsspidvmp.core.windows.net
+    //primary GACEQRDGcDPiQUtWRAPX9Z/+PiLx08mQwn+KZhVzlFPegW+Ff99Cs5v5j0ENYlrf2gxTTmABINaqlys658cXGw==
+    let account = AZSCloudStorageAccount(fromConnectionString: "DefaultEndpointsProtocol=https;AccountName=scoopsspidvmp;AccountKey=GACEQRDGcDPiQUtWRAPX9Z/+PiLx08mQwn+KZhVzlFPegW+Ff99Cs5v5j0ENYlrf2gxTTmABINaqlys658cXGw==")
     
     @IBOutlet weak var readerButton: UIBarButtonItem!
     
@@ -17,13 +22,13 @@ class NewsTVC: UITableViewController {
     
     //como voy con la mierda del storyboard, no puedo pasar el cliente, lo vuelvo a generar, deberia dar lo mismo
     var client = getMSClient()
+    var imageContainer : AZSCloudBlobContainer?
     
     //array del modelo de datos
     var model: [AnyObject]?
+    var modelblob : [AZSCloudBlob]?
     
-    
-    //activity indicator
-    let activityIndicator = UIActivityIndicatorView()
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -96,9 +101,12 @@ class NewsTVC: UITableViewController {
     func populateModel(){
         
 
-        self.activityIndicator.startAnimating()
-        self.navigationController?.navigationItem.titleView = self.activityIndicator
+
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         let tablaNoticias = client.tableWithName("Noticias")
+//        let blobClient : AZSCloudBlobClient = account.getBlobClient()
+//        imageContainer.lis
+        
         let query = MSQuery(table: tablaNoticias)
         query.selectFields = ["id","titulo","autor","fotoname"]
 
@@ -120,8 +128,10 @@ class NewsTVC: UITableViewController {
         query.readWithCompletion { (result:MSQueryResult?, error:NSError?) -> Void in
             if error == nil {
                 self.model = result?.items
+                //me recorro todos los elementos bajados
+                
                 self.tableView.reloadData()
-                self.activityIndicator.stopAnimating()
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             }
         }
 

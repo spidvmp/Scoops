@@ -60,10 +60,10 @@
 		2B31A4661C7E1AAC007FBFA3 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				2B31A4641C7E1AA8007FBFA3 /* Defines.swift */,
 				2B803E3A1C81A6F700EC2B3A /* disslike.png */,
 				2B803E3B1C81A6F700EC2B3A /* like.png */,
 				2BF159901C808863004AC035 /* emptyPic.jpg */,
-				2B31A4641C7E1AA8007FBFA3 /* Defines.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
