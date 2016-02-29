@@ -254,15 +254,44 @@ class ReportVC: UIViewController {
     @IBAction func disslikeAction(sender: AnyObject) {
         print("Disslike")
     }
+    
+    //func saveInDocuments(data : NSData){
+    func saveInDocuments(imagen : UIImage) {
+        
+        
+        let documents = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
+        
+        let filePath = documents.stringByAppendingString("temp.jpg")
+        
+        let existeElFichero = NSArray(contentsOfFile: filePath) as? [String]
+        
+        let data = UIImageJPEGRepresentation(imagen, 1.0)!
+        
+        if existeElFichero == nil{
+            data.writeToFile(filePath, atomically: true)
+
+        }
+        
+    }
 }
 
 extension ReportVC : UIImagePickerControllerDelegate{
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+
         print("tenemos la imagen")
         
-        self.foto.image = image
+        //self.foto.image = image
         self.dismissViewControllerAnimated(true, completion: nil)
+        if let img = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            //pongo la foto sacada
+            foto.image = img
+            //guaro la foto
+            saveInDocuments(img)
+        }
+//        //guardamos la imagen en un fichero temporal, ya que puede irese para atras y no subir la imagen
+//        let path = (info[UIImagePickerControllerMediaURL] as! NSURL).path
+//        saveInDocuments(NSData(contentsOfURL: NSURL(fileURLWithPath: path!))!)
     }
     
     
