@@ -146,8 +146,6 @@ class ReportVC: UIViewController {
             self.autorLbl!.text = ""
             self.likeButton.enabled = false
             self.disslikeButton.enabled = false
-            
-            
         }
     }
 
@@ -162,11 +160,7 @@ class ReportVC: UIViewController {
                 //guardamos las cerdenciales de logado en client.currentUser
                 client.currentUser = MSUser(userId: usrlogin.usr)
                 client.currentUser.mobileServiceAuthenticationToken = usrlogin.tok
-                
-                //aqui activo la posibilidad que ya le de a publicar, asi que los datos los meto en model, ya que si viene de un registro nuevo model es nil y eso no mola
-//                let m : [String: AnyObject]? = ["titulo": tituloTF.text!, "texto": textoTV.text!, "user": usrlogin.usr]
-//                model = m
-                
+
                 //es nuevo, inserto
                 let tablaNoticias = client.tableWithName("Noticias")
                 //estoy logado por cojones, asi que el numero de user lo grabo para saber cuales son mis publicaciones
@@ -176,27 +170,23 @@ class ReportVC: UIViewController {
                     if error != nil {
                         print ("Error al insertar noticia: \(error)")
                     } else {
-                        //ha insertado. deberia tener el id que ha puesto
-                        print("inserted: ",inserted)
+                        //ha insertado. genero los datos en el modelo, ya que ahora se puede publicar y necesito los datos en model
                         self.model = inserted
+                        //ahora subo la foto, como parametro mando el id del registro que ha insertado
+                        self.uploadPic(inserted["id"] as! String)
                     }
                 })
                 
                 //se ha subido la noticia, ahora queda la opcion de publicarla o no
-                
-                
                 self.menuItemButton!.title = "Publicar"
                 self.menuItemButton!.action = "clickPublicar:"
-                
             }
             
         } else {
             //no estamos logados
             
         }
-        
-        
-        
+ 
 
     }
     
@@ -221,12 +211,7 @@ class ReportVC: UIViewController {
         print("Elimino \(self.model)")
         //se borra, ya no pinto nada aqui
         deleteRecord(model!["id"] as! String, client: client)
-//        let tablaNoticias = client.tableWithName("Noticias")
-//        tablaNoticias?.delete(["id": model!["id"] as! String], completion: { (inserted, error: NSError?) -> Void in
-//            if error != nil {
-//                print("Error al borrar mi noticia: \(error)")
-//            }
-//        })
+        
         self.navigationController?.popViewControllerAnimated(true)
     }
     
@@ -255,17 +240,56 @@ class ReportVC: UIViewController {
         print("Disslike")
     }
     
+    func uploadPic(name : String) {
+        
+        //a traves de la api obtenemos una url para subir la foto
+        
+        //invocamos la api
+        client.invokeAPI("urlsastoblob",body: nil, HTTPMethod: "GET", parameters: ["blobName": name], headers:nil, completion: {(result: AnyObject?, response: NSHTTPURLResponse?, error: NSError? ) -> Void in
+            
+            if error != nil {
+                //aqui tenemos la url del blobpara usar
+                let sasURL = result!["sasUrl"] as? String
+                print("sas=\(sasURL)")
+                //creamos el contenedor a partir de esta sas
+                let endPoint = kEndpointAzureStorage + sasURL!
+                //refernecia del container
+                let container = AZSCloudBlobContainer(url: NSURL(string: endPoint)!)
+                //creamos el blob local para que me permita subir el blob
+                let blobLocal = container.blockBlobReferenceFromName(name)
+                
+                //havcemos el upload
+                let data =  UIImageJPEGRepresentation(self.foto.image!, 0.5)
+                blobLocal.uploadFromData(data!, completionHandler: { (error: NSError?) -> Void in
+                    if error != nil {
+                        print("error al subir la foto")
+                    }
+                })
+            }
+        })
+        
+        
+        
+        
+//        //subimos la foto que esta en foto.image y necesitamos el id que sera el nombre con el que se suba
+//        let blobLocal = currentContainer?.blockBlobReferenceName(kEndpointAzureStorage + name)
+//        var data : NSData?
+//        data = UIImageJPEGRepresentation(self.foto.image!, 0.5)
+//        blobLocal?.uploadFromData(data!, completionHandler: { (error: NSError!) -> Void in
+//            if ( error != nil ) {
+//                print(error)
+//            }
+//        })
+    }
+    
+    
     //func saveInDocuments(data : NSData){
     func saveInDocuments(imagen : UIImage) {
-        
-        
+
         let documents = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
-        
         let filePath = documents.stringByAppendingString("temp.jpg")
-        
         let existeElFichero = NSArray(contentsOfFile: filePath) as? [String]
-        
-        let data = UIImageJPEGRepresentation(imagen, 1.0)!
+        let data = UIImageJPEGRepresentation(imagen, 0.8)!
         
         if existeElFichero == nil{
             data.writeToFile(filePath, atomically: true)
@@ -289,9 +313,7 @@ extension ReportVC : UIImagePickerControllerDelegate{
             //guaro la foto
             saveInDocuments(img)
         }
-//        //guardamos la imagen en un fichero temporal, ya que puede irese para atras y no subir la imagen
-//        let path = (info[UIImagePickerControllerMediaURL] as! NSURL).path
-//        saveInDocuments(NSData(contentsOfURL: NSURL(fileURLWithPath: path!))!)
+
     }
     
     
