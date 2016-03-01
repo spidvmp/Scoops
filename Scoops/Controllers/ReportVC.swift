@@ -247,12 +247,12 @@ class ReportVC: UIViewController {
         //invocamos la api
         client.invokeAPI("urlsastoblob",body: nil, HTTPMethod: "GET", parameters: ["blobName": name], headers:nil, completion: {(result: AnyObject?, response: NSHTTPURLResponse?, error: NSError? ) -> Void in
             
-            if error != nil {
+            if error == nil {
                 //aqui tenemos la url del blobpara usar
                 let sasURL = result!["sasUrl"] as? String
                 print("sas=\(sasURL)")
                 //creamos el contenedor a partir de esta sas
-                let endPoint = kEndpointAzureStorage + sasURL!
+                let endPoint = kEndpointAzureStorage + sasURL! + ".jpg"
                 //refernecia del container
                 let container = AZSCloudBlobContainer(url: NSURL(string: endPoint)!)
                 //creamos el blob local para que me permita subir el blob
@@ -265,6 +265,9 @@ class ReportVC: UIViewController {
                         print("error al subir la foto")
                     }
                 })
+            } else {
+                //hubo error
+                print("Error al subior el blob: \(error)")
             }
         })
         

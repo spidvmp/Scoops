@@ -12,7 +12,7 @@
 //definiciones para conexion con Azure
 let kEndpointMobileService = "https://scoopsspidvmp.azure-mobile.net/"
 let kAppKeyMobileService = "zVKmUAIiFxyqaoNXdFpJltFfvXphJe87"
-let kEndpointAzureStorage = "https://scoopsspidvmp.blob.core.windows.net/"
+let kEndpointAzureStorage = "https://scoopsspidvmp.blob.core.windows.net"
 
 let account = AZSCloudStorageAccount(fromConnectionString: "DefaultEndpointsProtocol=https;AccountName=scoopsspidvmp;AccountKey=GACEQRDGcDPiQUtWRAPX9Z/+PiLx08mQwn+KZhVzlFPegW+Ff99Cs5v5j0ENYlrf2gxTTmABINaqlys658cXGw==")
 
