@@ -13,8 +13,11 @@
 let kEndpointMobileService = "https://scoopsspidvmp.azure-mobile.net/"
 let kAppKeyMobileService = "zVKmUAIiFxyqaoNXdFpJltFfvXphJe87"
 let kEndpointAzureStorage = "https://scoopsspidvmp.blob.core.windows.net"
+let kAPIName = "urlsastoblob"
 
-let account = AZSCloudStorageAccount(fromConnectionString: "DefaultEndpointsProtocol=https;AccountName=scoopsspidvmp;AccountKey=GACEQRDGcDPiQUtWRAPX9Z/+PiLx08mQwn+KZhVzlFPegW+Ff99Cs5v5j0ENYlrf2gxTTmABINaqlys658cXGw==")
+//let account = AZSCloudStorageAccount(fromConnectionString: "DefaultEndpointsProtocol=https;AccountName=scoopsspidvmp;AccountKey=GACEQRDGcDPiQUtWRAPX9Z/+PiLx08mQwn+KZhVzlFPegW+Ff99Cs5v5j0ENYlrf2gxTTmABINaqlys658cXGw==")
+
+
 
 //metodos para obtener el cliente de conexion con Azure
 func getMSClient() -> MSClient {

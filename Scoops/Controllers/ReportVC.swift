@@ -94,6 +94,7 @@ class ReportVC: UIViewController {
         updateUI()
     }
     
+
     func updateUI(){
         //si no tengo datos, es que es nueva noticia a redactar
         if let model = model {
@@ -104,9 +105,34 @@ class ReportVC: UIViewController {
             self.autorLbl!.text = model["autor"] as? String
             self.puntuacionLbl!.text = model["validacion"] as? String
             
-            if let fotoName = model["fotoname"] {
-                //tengo imagen, me la tengo que bajar
-            }
+            //el nombre de la foto es el id
+//            if let fotoName = model["fotoname"] {
+//                //tengo imagen, me la tengo que bajar
+//            }
+            //me bajo la foto, si da error es que no existe, no pasa nada
+//            client.invokeAPI(kAPIName, body: nil, HTTPMethod: "GET", parameters: ["blobName" : model["id"] as! String, "containerName" : "imagenes"], headers: nil, completion: {(result: AnyObject?, response: NSHTTPURLResponse?, error: NSError? ) -> Void in
+//                if error == nil {
+//                    //no hubo error, asi que tenemos foto
+//                    //aqui tenemos la url del blobpara usar
+//                    let sasURL = result!["sasUrl"] as? String
+//                    //creamos el contenedor a partir de esta sas
+//                    let endPoint = kEndpointAzureStorage + sasURL!
+//                    //descargamos la imagen en un data
+//                    //let data = NSData(contentsOfURL: NSURL(string: endPoint)!)
+                    let x = model["id"] as! String
+                    let s = kEndpointAzureStorage + "/imagenes/" + x
+                    let data = NSData(contentsOfURL: NSURL(string: s )!)
+                    
+                    //mostramos la foto en el thread priincipal
+//                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.foto.image = UIImage(data: data!)
+//                    })
+
+                    
+//                } else {
+//                    //error, hay que pensar que no existe el blob, asi que no se pone la foto
+//                }
+//            })
             
             //si estoy editando mi noticia:
             if self.isEditingNews == true {
@@ -166,6 +192,7 @@ class ReportVC: UIViewController {
                 //estoy logado por cojones, asi que el numero de user lo grabo para saber cuales son mis publicaciones
                 //no inseeto nada ane validacion, ya que siempre inicio con 0, asi que lo hago en el script de insertar
                 //queda el script preparado para que si envio el autor no lo vuelva a buscar, de momento no lo implemento por tiempo
+                
                 tablaNoticias?.insert(["titulo": tituloTF.text!, "texto": textoTV.text, "estado": "NP", "user":usrlogin.usr], completion: { (inserted, error: NSError?) -> Void in
                     if error != nil {
                         print ("Error al insertar noticia: \(error)")
@@ -207,8 +234,6 @@ class ReportVC: UIViewController {
     }
     
     func deleteNoticia(sender: AnyObject) {
-        
-        print("Elimino \(self.model)")
         //se borra, ya no pinto nada aqui
         deleteRecord(model!["id"] as! String, client: client)
         
@@ -216,7 +241,6 @@ class ReportVC: UIViewController {
     }
     
     func takeAPic(sender: AnyObject){
-        print("take a pic")
         let picker = UIImagePickerController()
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
             //tenemos camara
@@ -245,14 +269,14 @@ class ReportVC: UIViewController {
         //a traves de la api obtenemos una url para subir la foto
         
         //invocamos la api
-        client.invokeAPI("urlsastoblob",body: nil, HTTPMethod: "GET", parameters: ["blobName": name], headers:nil, completion: {(result: AnyObject?, response: NSHTTPURLResponse?, error: NSError? ) -> Void in
+        client.invokeAPI(kAPIName,body: nil, HTTPMethod: "GET", parameters: ["blobName": name], headers:nil, completion: {(result: AnyObject?, response: NSHTTPURLResponse?, error: NSError? ) -> Void in
             
             if error == nil {
                 //aqui tenemos la url del blobpara usar
                 let sasURL = result!["sasUrl"] as? String
                 print("sas=\(sasURL)")
                 //creamos el contenedor a partir de esta sas
-                let endPoint = kEndpointAzureStorage + sasURL! + ".jpg"
+                let endPoint = kEndpointAzureStorage + sasURL!
                 //refernecia del container
                 let container = AZSCloudBlobContainer(url: NSURL(string: endPoint)!)
                 //creamos el blob local para que me permita subir el blob
@@ -270,19 +294,7 @@ class ReportVC: UIViewController {
                 print("Error al subior el blob: \(error)")
             }
         })
-        
-        
-        
-        
-//        //subimos la foto que esta en foto.image y necesitamos el id que sera el nombre con el que se suba
-//        let blobLocal = currentContainer?.blockBlobReferenceName(kEndpointAzureStorage + name)
-//        var data : NSData?
-//        data = UIImageJPEGRepresentation(self.foto.image!, 0.5)
-//        blobLocal?.uploadFromData(data!, completionHandler: { (error: NSError!) -> Void in
-//            if ( error != nil ) {
-//                print(error)
-//            }
-//        })
+
     }
     
     
@@ -306,8 +318,6 @@ extension ReportVC : UIImagePickerControllerDelegate{
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
 
-        print("tenemos la imagen")
-        
         //self.foto.image = image
         self.dismissViewControllerAnimated(true, completion: nil)
         if let img = info[UIImagePickerControllerOriginalImage] as? UIImage {
