@@ -105,7 +105,7 @@ class ReportVC: UIViewController {
             self.tituloTF!.text = model["titulo"] as? String
             self.textoTV!.text = model["texto"] as? String
             self.autorLbl!.text = model["autor"] as? String
-            self.puntuacionLbl!.text = model["validacion"] as? String
+            self.puntuacionLbl!.text = model["valoracion"] as? String
             
             //me quedocon el nombre de la foto, que sera el id
             let fotoname = model["id"] as! String

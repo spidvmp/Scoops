@@ -108,7 +108,7 @@ class NewsTVC: UITableViewController {
 //        imageContainer.lis
         
         let query = MSQuery(table: tablaNoticias)
-        query.selectFields = ["id","titulo","autor","fotoname"]
+        query.selectFields = ["id","titulo","autor"]
 
         
         //segun sea iAmReader hace una busqueda o hace otra diferente
