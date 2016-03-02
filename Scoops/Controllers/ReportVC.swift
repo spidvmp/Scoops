@@ -15,8 +15,8 @@ class ReportVC: UIViewController {
     @IBOutlet weak var textoTV: UITextView!
     @IBOutlet weak var autorLbl: UILabel!
     @IBOutlet weak var puntuacionLbl: UILabel!
-    @IBOutlet weak var likeButton: UIButton!
-    @IBOutlet weak var disslikeButton: UIButton!
+    @IBOutlet weak var valorarButton: UIButton!
+
   
     
     //conexion con azure
@@ -67,7 +67,7 @@ class ReportVC: UIViewController {
                     } else {
                         print("Error al recuperar el dato")
                     }
-                    print(self.model)
+                    //print(self.model)
                     self.updateUI()
                 }
             }
@@ -105,7 +105,7 @@ class ReportVC: UIViewController {
             self.tituloTF!.text = model["titulo"] as? String
             self.textoTV!.text = model["texto"] as? String
             self.autorLbl!.text = model["autor"] as? String
-            self.puntuacionLbl!.text = model["valoracion"] as? String
+            //self.puntuacionLbl!.text = model["valoracion"] as? String
             
             //me quedocon el nombre de la foto, que sera el id
             let fotoname = model["id"] as! String
@@ -142,8 +142,7 @@ class ReportVC: UIViewController {
             if self.isEditingNews == true {
                 //es mi noticia y la estoy editando
                 //no me puedo votar
-                self.likeButton.enabled = false
-                self.disslikeButton.enabled = false
+                self.valorarButton.enabled = false
                 
                 //si paso por aqui es que la noticia ya esta subida, compruebo si esta publicada o no para dar opcion a borrarla
                 //es posible que cuando se esta acargando, todavia no tengamos estado, asi que hay que comprobarlo
@@ -164,8 +163,8 @@ class ReportVC: UIViewController {
                 }
             } else {
                 //estoy viendo la noticia de otro, la puedo votar
-                self.likeButton.enabled = true
-                self.disslikeButton.enabled = true
+                self.valorarButton.enabled = true
+
             }
             
         } else {
@@ -174,8 +173,8 @@ class ReportVC: UIViewController {
             self.textoTV!.text = ""
             self.puntuacionLbl!.text = ""
             self.autorLbl!.text = ""
-            self.likeButton.enabled = false
-            self.disslikeButton.enabled = false
+            self.valorarButton.enabled = false
+
         }
     }
 
@@ -260,15 +259,25 @@ class ReportVC: UIViewController {
         picker.modalTransitionStyle = .CrossDissolve
         self.presentViewController(picker, animated: true, completion: nil)
     }
+    
+    @IBAction func valorarAction(sender: AnyObject) {
+        print("valorar")
+        self.textoTV.endEditing(true)
+        
+        let picker = UIPickerView()
+        picker.backgroundColor = UIColor.greenColor()
+        var fr = picker.frame
+        fr.origin.y = self.view.bounds.height - fr.size.height
+        picker.frame = fr
+        picker.dataSource = self
+        picker.delegate  = self
+        self.view .addSubview(picker)
+    }
+    
+
     //MARK: - Acceso a Azure
-    
-    @IBAction func likeAction(sender: AnyObject) {
-        print ("Like")
-    }
-    
-    @IBAction func disslikeAction(sender: AnyObject) {
-        print("Disslike")
-    }
+
+
     
     func uploadPic(name : String) {
         
@@ -280,7 +289,7 @@ class ReportVC: UIViewController {
             if error == nil {
                 //aqui tenemos la url del blobpara usar
                 let sasURL = result!["sasUrl"] as? String
-                print("sas=\(sasURL)")
+                //print("sas=\(sasURL)")
                 //creamos el contenedor a partir de esta sas
                 let endPoint = kEndpointAzureStorage + sasURL!
                 //refernecia del container
@@ -339,5 +348,42 @@ extension ReportVC : UIImagePickerControllerDelegate{
 }
 
 extension ReportVC : UINavigationControllerDelegate {
+    
+}
+
+extension ReportVC : UIPickerViewDataSource {
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        //solo se puede votar de 1 a 10
+        return 10
+    }
+    
+}
+
+extension ReportVC : UIPickerViewDelegate {
+    
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return String(row)
+    }
+    
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        //han seleccionado una valoracion, he de grabarla en la tabla de valoraciones
+        let tablaValoracion = client.tableWithName("valoraciones")
+        //estoy logado por cojones, asi que el numero de user lo grabo para saber cuales son mis publicaciones
+        //no inseeto nada ane validacion, ya que siempre inicio con 0, asi que lo hago en el script de insertar
+        //queda el script preparado para que si envio el autor no lo vuelva a buscar, de momento no lo implemento por tiempo
+        
+        tablaValoracion?.insert(["valoracion": String(row), "id_noticia": model!["id"] as! String], completion: { (inserted, error: NSError?) -> Void in
+            if error != nil {
+                print ("Error al insertar valoracion: \(error)")
+            }
+        })
+        
+        pickerView.removeFromSuperview()
+    }
+    
     
 }
