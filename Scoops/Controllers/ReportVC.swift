@@ -68,7 +68,7 @@ class ReportVC: UIViewController {
                         print("Error al recuperar el dato")
                     }
                     print(self.model)
-                    //self.updateUI()
+                    self.updateUI()
                 }
             }
             
@@ -90,8 +90,9 @@ class ReportVC: UIViewController {
             self.tapPic = UITapGestureRecognizer(target: self, action: Selector("takeAPic:"))
             self.foto.userInteractionEnabled = true
             self.foto.addGestureRecognizer(tapPic!)
+            updateUI()
         }
-        updateUI()
+        
     }
     
 
@@ -182,6 +183,7 @@ class ReportVC: UIViewController {
     //MARK: - Actions
     func subirNoticia(sender: AnyObject) {
         //primero compruebo si esta logado, ay que hemos cambiado que el insert solo acepta logados
+        self.textoTV.endEditing(true)
         if isUserloged() {
             
             //cargamos los datos del usuario
@@ -196,7 +198,7 @@ class ReportVC: UIViewController {
                 //no inseeto nada ane validacion, ya que siempre inicio con 0, asi que lo hago en el script de insertar
                 //queda el script preparado para que si envio el autor no lo vuelva a buscar, de momento no lo implemento por tiempo
                 
-                tablaNoticias?.insert(["titulo": tituloTF.text!, "texto": textoTV.text, "estado": "NP", "user":usrlogin.usr], completion: { (inserted, error: NSError?) -> Void in
+                tablaNoticias?.insert(["titulo": tituloTF.text!, "texto": textoTV.text!, "estado": "NP", "user":usrlogin.usr], completion: { (inserted, error: NSError?) -> Void in
                     if error != nil {
                         print ("Error al insertar noticia: \(error)")
                     } else {
@@ -244,6 +246,7 @@ class ReportVC: UIViewController {
     }
     
     func takeAPic(sender: AnyObject){
+        self.textoTV.endEditing(true)
         let picker = UIImagePickerController()
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
             //tenemos camara
