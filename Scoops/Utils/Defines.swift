@@ -63,8 +63,25 @@ func deleteRecord(id: String, client: MSClient) {
             print("Error al borrar mi noticia: \(error)")
         } else {
             //no hubo errores, ahora borro la foto, que tiene como nombre el id.jpg
-            
+//            client.invokeAPI(kAPIName, body: nil, HTTPMethod: "GET", parameters: ["blobName" : id, "containerName" : "imagenes"], headers: nil, completion: {(result: AnyObject?, response: NSHTTPURLResponse?, error: NSError? ) -> Void in
+//                if error == nil {
+//                    //no hubo error, asi que tenemos foto
+//                    //aqui tenemos la url del blobpara usar
+//                    let sasURL = result!["sasUrl"] as? String
+//                    //creamos el contenedor a partir de esta sas
+//                    let endPoint = kEndpointAzureStorage + sasURL!
+//                    //refernecia del container
+//                    let container = AZSCloudBlobContainer(url: NSURL(string: endPoint)!)
+//                    //creamos el blob
+//                    let blob = container.blockBlobReferenceFromName(id)
+//                    blob.delete()
+//                    
+//                    
+//                }
+//            })
         }
     })
 }
+
+
 

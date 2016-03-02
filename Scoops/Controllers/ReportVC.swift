@@ -68,7 +68,7 @@ class ReportVC: UIViewController {
                         print("Error al recuperar el dato")
                     }
                     print(self.model)
-                    self.updateUI()
+                    //self.updateUI()
                 }
             }
             
@@ -96,6 +96,7 @@ class ReportVC: UIViewController {
     
 
     func updateUI(){
+        
         //si no tengo datos, es que es nueva noticia a redactar
         if let model = model {
             //tengo datos, los muestro
@@ -105,45 +106,47 @@ class ReportVC: UIViewController {
             self.autorLbl!.text = model["autor"] as? String
             self.puntuacionLbl!.text = model["validacion"] as? String
             
-            //el nombre de la foto es el id
-//            if let fotoName = model["fotoname"] {
-//                //tengo imagen, me la tengo que bajar
-//            }
-            //me bajo la foto, si da error es que no existe, no pasa nada
-//            client.invokeAPI(kAPIName, body: nil, HTTPMethod: "GET", parameters: ["blobName" : model["id"] as! String, "containerName" : "imagenes"], headers: nil, completion: {(result: AnyObject?, response: NSHTTPURLResponse?, error: NSError? ) -> Void in
-//                if error == nil {
-//                    //no hubo error, asi que tenemos foto
-//                    //aqui tenemos la url del blobpara usar
-//                    let sasURL = result!["sasUrl"] as? String
-//                    //creamos el contenedor a partir de esta sas
-//                    let endPoint = kEndpointAzureStorage + sasURL!
-//                    //descargamos la imagen en un data
-//                    //let data = NSData(contentsOfURL: NSURL(string: endPoint)!)
-                    let x = model["id"] as! String
-                    let s = kEndpointAzureStorage + "/imagenes/" + x
-                    let data = NSData(contentsOfURL: NSURL(string: s )!)
-                    
-                    //mostramos la foto en el thread priincipal
-//                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        self.foto.image = UIImage(data: data!)
-//                    })
-
-                    
-//                } else {
-//                    //error, hay que pensar que no existe el blob, asi que no se pone la foto
-//                }
-//            })
+            //me quedocon el nombre de la foto, que sera el id
+            let fotoname = model["id"] as! String
             
+            //me bajo la foto, si da error es que no existe, no pasa nada
+            client.invokeAPI(kAPIName, body: nil, HTTPMethod: "GET", parameters: ["blobName" : fotoname, "containerName" : "imagenes"], headers: nil, completion: {(result: AnyObject?, response: NSHTTPURLResponse?, error: NSError? ) -> Void in
+                if error == nil {
+                    //no hubo error, asi que tenemos foto
+                    //aqui tenemos la url del blobpara usar
+                    let sasURL = result!["sasUrl"] as? String
+                    //creamos el contenedor a partir de esta sas
+                    let endPoint = kEndpointAzureStorage + sasURL!
+                    //refernecia del container
+                    let container = AZSCloudBlobContainer(url: NSURL(string: endPoint)!)
+                    //creamos el blob local para que me permita subir el blob
+                    let blobLocal = container.blockBlobReferenceFromName(fotoname)
+                    //bajamos la foto
+                    
+                    blobLocal.downloadToDataWithCompletionHandler({ (error: NSError?, result: NSData?) -> Void in
+                        if error == nil {
+                            //se ha bajado la foto
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                self.foto.image = UIImage(data: result!)
+                            })
+                        }
+                    })
+                } else {
+                    //error, hay que pensar que no existe el blob, asi que no se pone la foto
+                }
+            })
+                
+
             //si estoy editando mi noticia:
             if self.isEditingNews == true {
                 //es mi noticia y la estoy editando
                 //no me puedo votar
                 self.likeButton.enabled = false
                 self.disslikeButton.enabled = false
-
+                
                 //si paso por aqui es que la noticia ya esta subida, compruebo si esta publicada o no para dar opcion a borrarla
                 //es posible que cuando se esta acargando, todavia no tengamos estado, asi que hay que comprobarlo
-
+                
                 
                 if let estado = model["estado"]!  {
                     if estado as! String == "NP" {
