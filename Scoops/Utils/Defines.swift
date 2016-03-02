@@ -14,6 +14,7 @@ let kEndpointMobileService = "https://scoopsspidvmp.azure-mobile.net/"
 let kAppKeyMobileService = "zVKmUAIiFxyqaoNXdFpJltFfvXphJe87"
 let kEndpointAzureStorage = "https://scoopsspidvmp.blob.core.windows.net"
 let kAPIName = "urlsastoblob"
+let kAPIValoracion = "getvaloracion"
 
 //let account = AZSCloudStorageAccount(fromConnectionString: "DefaultEndpointsProtocol=https;AccountName=scoopsspidvmp;AccountKey=GACEQRDGcDPiQUtWRAPX9Z/+PiLx08mQwn+KZhVzlFPegW+Ff99Cs5v5j0ENYlrf2gxTTmABINaqlys658cXGw==")
 
@@ -86,6 +87,7 @@ func deleteRecord(id: String, client: MSClient) {
         }
     })
 }
+
 
 
 

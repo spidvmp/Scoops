@@ -136,7 +136,9 @@ class ReportVC: UIViewController {
                     //error, hay que pensar que no existe el blob, asi que no se pone la foto
                 }
             })
-                
+            
+            //coloco la valoracion que tenga
+            getValoracion(self.model!["id"] as! String, client: client)
 
             //si estoy editando mi noticia:
             if self.isEditingNews == true {
@@ -261,7 +263,7 @@ class ReportVC: UIViewController {
     }
     
     @IBAction func valorarAction(sender: AnyObject) {
-        print("valorar")
+
         self.textoTV.endEditing(true)
         
         let picker = UIPickerView()
@@ -366,7 +368,7 @@ extension ReportVC : UIPickerViewDataSource {
 extension ReportVC : UIPickerViewDelegate {
     
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return String(row)
+        return String(row + 1)
     }
     
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
@@ -376,14 +378,54 @@ extension ReportVC : UIPickerViewDelegate {
         //no inseeto nada ane validacion, ya que siempre inicio con 0, asi que lo hago en el script de insertar
         //queda el script preparado para que si envio el autor no lo vuelva a buscar, de momento no lo implemento por tiempo
         
-        tablaValoracion?.insert(["valoracion": String(row), "id_noticia": model!["id"] as! String], completion: { (inserted, error: NSError?) -> Void in
+        tablaValoracion?.insert(["valoracion": String(row + 1), "id_noticia": model!["id"] as! String], completion: { (inserted, error: NSError?) -> Void in
             if error != nil {
                 print ("Error al insertar valoracion: \(error)")
             }
+            //deberia sacar la nueva valoracion y ponerla
+            self.getValoracion(self.model!["id"] as! String, client: self.client)
+            
         })
+
+
         
+//        client.invokeAPI(kAPIValoracion,body: nil, HTTPMethod: "GET", parameters: ["id_noticia": model!["id"] as! String], headers:nil, completion: {(result: AnyObject?, response: NSHTTPURLResponse?, error: NSError? ) -> Void in
+//            if error == nil {
+//                //tengo datos,
+//                let a = result!["valoracion"]
+//                let b = a!![0]
+//                let c = b["v"]
+//                
+//                let v = String(format: "%0.2f", c as! Float)
+//                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                    self.puntuacionLbl.text = v
+//                })
+//            }
+//            
+//        })
         pickerView.removeFromSuperview()
     }
+
+}
+
+extension ReportVC {
     
-    
+    func getValoracion(noticia: String, client:MSClient) {
+        
+        client.invokeAPI(kAPIValoracion,body: nil, HTTPMethod: "GET", parameters: ["id_noticia": model!["id"] as! String], headers:nil, completion: {(result: AnyObject?, response: NSHTTPURLResponse?, error: NSError? ) -> Void in
+            if error == nil {
+                //tengo datos,
+                let a = result!["valoracion"]
+                let b = a!![0]
+                let c = b["v"]
+                
+                let v = String(format: "%0.2f", c as! Float)
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.puntuacionLbl.text = v
+                })
+            }
+            
+        })
+        
+    }
 }
