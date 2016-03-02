@@ -84,6 +84,17 @@ func deleteRecord(id: String, client: MSClient) {
                     
                 }
             })
+            
+            //elimino las votaciones que tuviera la noticia
+            let tablaValoraciones = client.tableWithName("valoraciones")
+            tablaValoraciones?.delete(["id_noticia":id], completion: { (results: AnyObject?, error: NSError?) -> Void in
+                //pues la verda me da lo mismo si borra o no
+                if error == nil {
+                    print(results)
+                } else {
+                    print(error)
+                }
+            })
         }
     })
 }

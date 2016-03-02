@@ -415,11 +415,10 @@ extension ReportVC {
         client.invokeAPI(kAPIValoracion,body: nil, HTTPMethod: "GET", parameters: ["id_noticia": model!["id"] as! String], headers:nil, completion: {(result: AnyObject?, response: NSHTTPURLResponse?, error: NSError? ) -> Void in
             if error == nil {
                 //tengo datos,
-                let a = result!["valoracion"]
-                let b = a!![0]
-                let c = b["v"]
+                let a = result!["valoracion"] as! Float
+
                 
-                let v = String(format: "%0.2f", c as! Float)
+                let v = String(format: "%0.2f", a)
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self.puntuacionLbl.text = v
                 })
