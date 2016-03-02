@@ -314,8 +314,7 @@ class ReportVC: UIViewController {
 
     }
     
-    
-    //func saveInDocuments(data : NSData){
+
     func saveInDocuments(imagen : UIImage) {
 
         let documents = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
@@ -329,6 +328,26 @@ class ReportVC: UIViewController {
         }
         
     }
+    
+    func getValoracion(noticia: String, client:MSClient) {
+        
+        client.invokeAPI(kAPIValoracion,body: nil, HTTPMethod: "GET", parameters: ["id_noticia": model!["id"] as! String], headers:nil, completion: {(result: AnyObject?, response: NSHTTPURLResponse?, error: NSError? ) -> Void in
+            if error == nil {
+                //tengo datos,
+                let a = result!["valoracion"] as! Float
+                
+                
+                let v = String(format: "%0.2f", a)
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.puntuacionLbl.text = v
+                })
+            }
+            
+        })
+        
+    }
+    
+    
 }
 
 extension ReportVC : UIImagePickerControllerDelegate{
@@ -388,43 +407,7 @@ extension ReportVC : UIPickerViewDelegate {
         })
 
 
-        
-//        client.invokeAPI(kAPIValoracion,body: nil, HTTPMethod: "GET", parameters: ["id_noticia": model!["id"] as! String], headers:nil, completion: {(result: AnyObject?, response: NSHTTPURLResponse?, error: NSError? ) -> Void in
-//            if error == nil {
-//                //tengo datos,
-//                let a = result!["valoracion"]
-//                let b = a!![0]
-//                let c = b["v"]
-//                
-//                let v = String(format: "%0.2f", c as! Float)
-//                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                    self.puntuacionLbl.text = v
-//                })
-//            }
-//            
-//        })
         pickerView.removeFromSuperview()
     }
 
-}
-
-extension ReportVC {
-    
-    func getValoracion(noticia: String, client:MSClient) {
-        
-        client.invokeAPI(kAPIValoracion,body: nil, HTTPMethod: "GET", parameters: ["id_noticia": model!["id"] as! String], headers:nil, completion: {(result: AnyObject?, response: NSHTTPURLResponse?, error: NSError? ) -> Void in
-            if error == nil {
-                //tengo datos,
-                let a = result!["valoracion"] as! Float
-
-                
-                let v = String(format: "%0.2f", a)
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.puntuacionLbl.text = v
-                })
-            }
-            
-        })
-        
-    }
 }
