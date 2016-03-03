@@ -16,6 +16,7 @@ let kEndpointAzureStorage = "https://scoopsspidvmp.blob.core.windows.net"
 let kAPIName = "urlsastoblob"
 let kAPIValoracion = "getvaloracion"
 
+
 //let account = AZSCloudStorageAccount(fromConnectionString: "DefaultEndpointsProtocol=https;AccountName=scoopsspidvmp;AccountKey=GACEQRDGcDPiQUtWRAPX9Z/+PiLx08mQwn+KZhVzlFPegW+Ff99Cs5v5j0ENYlrf2gxTTmABINaqlys658cXGw==")
 
 
@@ -85,16 +86,22 @@ func deleteRecord(id: String, client: MSClient) {
                 }
             })
             
-            //elimino las votaciones que tuviera la noticia
-            let tablaValoraciones = client.tableWithName("valoraciones")
-            tablaValoraciones?.delete(["id_noticia":id], completion: { (results: AnyObject?, error: NSError?) -> Void in
-                //pues la verda me da lo mismo si borra o no
-                if error == nil {
-                    print(results)
-                } else {
-                    print(error)
+            //elimino las votaciones que tuviera la noticia, he de hacerlo con unscript
+            client.invokeAPI(kAPIValoracion, body: nil, HTTPMethod: "DELETE", parameters: ["id_noticia": id], headers: nil, completion: { (result: AnyObject?, response: NSHTTPURLResponse? , error : NSError?) -> Void in
+                
+                if error != nil {
+                    print("Error al borrar: \(error)");
                 }
             })
+//            let tablaValoraciones = client.tableWithName("valoraciones")
+//            tablaValoraciones?.delete(["id_noticia":id], completion: { (results: AnyObject?, error: NSError?) -> Void in
+//
+//                if error == nil {
+//                    print(results)
+//                } else {
+//                    print(error)
+//                }
+//            })
         }
     })
 }

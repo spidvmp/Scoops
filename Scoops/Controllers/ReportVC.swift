@@ -32,6 +32,9 @@ class ReportVC: UIViewController {
     
     //tengo un gesto de tap en la foto para sacar foto. En caso de que este viendo la noticia como lector no puedo tocar la foto
     var tapPic : UITapGestureRecognizer?
+    
+    //un bool para saber si se ha puesto foto o no, si no se ha puesto, pues no se sube
+    var siTengoFoto : Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,7 +51,9 @@ class ReportVC: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        //print("seleccionado el \(model)")
+        //acabo de llegar, no tengo foto subida
+        self.siTengoFoto = false
+        
         //solo muestro los datos si me han llegado
         if let _ = model {
             //hay contenido
@@ -284,7 +289,9 @@ class ReportVC: UIViewController {
     func uploadPic(name : String) {
         
         //a traves de la api obtenemos una url para subir la foto
-        
+        if siTengoFoto == false {
+            return
+        }
         //invocamos la api
         client.invokeAPI(kAPIName,body: nil, HTTPMethod: "GET", parameters: ["blobName": name], headers:nil, completion: {(result: AnyObject?, response: NSHTTPURLResponse?, error: NSError? ) -> Void in
             
@@ -359,7 +366,8 @@ extension ReportVC : UIImagePickerControllerDelegate{
         if let img = info[UIImagePickerControllerOriginalImage] as? UIImage {
             //pongo la foto sacada
             foto.image = img
-            //guaro la foto
+            self.siTengoFoto = true
+            //guardo la foto
             saveInDocuments(img)
         }
 
