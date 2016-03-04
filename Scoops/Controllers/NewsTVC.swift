@@ -91,7 +91,24 @@ class NewsTVC: UITableViewController {
         let news = model![indexPath.row]
         //cell.textLabel!.text = "Noticia \(indexPath.row)"
         cell.textLabel!.text = news["titulo"] as? String
-        cell.detailTextLabel!.text = news["autor"] as? String
+        //si soy lector o estoy con mis noticias pongo el detalle diferente, o el autor, o el estado de la noticia
+        if iAmReader  {
+            cell.detailTextLabel!.text = news["autor"] as? String
+        } else {
+            //son mis noticias, asi que pongo el estado
+            if let estado = news["estado"] as? String {
+                switch estado {
+                    case "P":
+                        cell.detailTextLabel!.text = "Publicado"
+                    case "WP":
+                        cell.detailTextLabel!.text = "Publicado en espera de ser visible"
+                    case "NP":
+                        cell.detailTextLabel!.text = "No Publicado"
+                    default:
+                        cell.detailTextLabel!.text = "No Publicado"
+                }
+            }
+        }
         
 
         return cell
@@ -108,17 +125,20 @@ class NewsTVC: UITableViewController {
 //        imageContainer.lis
         
         let query = MSQuery(table: tablaNoticias)
-        query.selectFields = ["id","titulo","autor"]
+        
 
         
         //segun sea iAmReader hace una busqueda o hace otra diferente
         if iAmReader {
+            //indico el autor
+            query.selectFields = ["id","titulo","autor"]
             //soy lector, muestra todas la noticias que esten publicadas sea de quien sea
             query.predicate = NSPredicate(format: "estado == 'P'")
             query.orderByDescending("__createdAt")
 
         } else {
-            
+            //somo solo son mis noticias, no me intersa el autor y si el estado
+            query.selectFields = ["id","titulo","estado"]
             // Soy escrito, asi que tengo que estar logado para que muestre solo mis articulos
             query.orderByAscending("titulo")
             query.predicate = NSPredicate(format: "user == '" + client.currentUser.userId + "'")
