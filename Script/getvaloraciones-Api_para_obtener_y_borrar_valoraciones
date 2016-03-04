@@ -1,0 +1,42 @@
+exports.get = function(request, response) {
+    
+    //obtenfo el id de la noticia
+    var noticia = request.query.id_noticia;
+    var valoracion = 0;
+    
+    var  mssql = request.service.mssql;
+    var sql = "select avg(valoracion) as v from valoraciones where id_noticia='" + noticia + "'";
+
+    mssql.query(sql, {
+        success: function (result){
+            var val = 0;
+            if ( result[0]["v"] != null) {
+                val = result[0]["v"];
+            }
+            //console.log("Valorado " + val);
+            request.respond(200, {"valoracion" :  val});
+        },
+        error: function (error) {
+            console.log(error);
+            request.respond(202, {"valoracion" :  valoracion});
+        }
+    });
+};
+
+exports.delete = function(request, response) {
+    //obtengo el id para borrar
+    var noticia = request.query.id_noticia;
+    
+    var mssql = request.service.mssql;
+    var sql = "delete from valoraciones where id_noticia = '" + noticia + "'";
+
+    mssql.query(sql,{
+        success: function (result) {
+            request.respond(200,{borrado: 'ok'});
+        },
+        error: function(error){
+            console.log("Error borrado de validaciones " + error);
+            request.respond(202,{borrado: error});
+        }
+    });
+};

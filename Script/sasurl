@@ -1,0 +1,36 @@
+var azure = require('azure');
+var qs = require('querystring');
+
+exports.get = function(request, response) {
+    //en el parametro nos llega el nombre del blob
+    var blobName = request.query.blobName;
+    var containerName = "imagenes";
+    
+    var accountName = 'scoopsspidvmp';
+    var accountKey = 'GACEQRDGcDPiQUtWRAPX9Z/+PiLx08mQwn+KZhVzlFPegW+Ff99Cs5v5j0ENYlrf2gxTTmABINaqlys658cXGw==';
+    var host = accountName + '.blob.core.windows.net/';
+    
+    var blobService = azure.createBlobService(accountName, accountKey, host);
+    var sharedAccessPolicy = {
+        AccessPolicy :{
+            Permissions: 'rw',
+            Expiry: minutesFromNow(5)
+        }
+    };
+    
+    var sasURL = blobService.generateSharedAccessSignature(containerName, '', sharedAccessPolicy);
+    var sasQueryString = {'sasUrl' : sasURL.path + '?' + qs.stringify(sasURL.queryString)};
+    
+    request.respond(200, sasQueryString);
+};
+
+function minutesFromNow(minutes) {
+    var date = new Date();
+    date.setMinutes(date.getMinutes() + minutes);
+    return date;
+}
+
+function formateDate(date) {
+    var raw = date.toJSON();
+    return raw.substr(0, raw.lastIndexOf('.')) + 'Z';
+}

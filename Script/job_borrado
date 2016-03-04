@@ -1,0 +1,29 @@
+function Borrados() {
+    mssql.query("delete from Noticias where __deleted = 'true'", {
+        success: function(result) {
+            //console.log("Registros eliminados");
+        }, 
+        error: function(error) {
+            console.log("Error al borrar: " + error);
+         }
+    });
+    
+    mssql.query("delete from valoraciones where __deleted = 'true'", {
+        success: function(result) {
+            //console.log("Registros eliminados");
+        }, 
+        error: function(error) {
+            console.log("Error al borrar: " + error);
+         }
+    });
+    
+    //en version gratuita solo puedo tenrr un job, asi que lo meto aqui la publicacion
+    mssql.query("update Noticias set estado='P' where estado = 'WP'", {
+        success: function(result) {
+            //console.log("Publicado todo");
+        },
+        error: function(error) {
+            console.log("Error al publicar: " + error);
+        }
+    });
+}

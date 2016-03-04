@@ -1,0 +1,27 @@
+function insert(item, user, request) {
+
+    if ( typeof item.autor == 'undefined' ) {
+        //no tenemos el nombre, lo vamos a buscar
+        user.getIdentities({
+            success: function (identities) {
+                var http = require('request');
+                console.log('Identities: ', identities);
+                var url = 'https://graph.facebook.com/me?fields=id,name&access_token=' +
+                    identities.facebook.accessToken;
+     
+                var reqParams = { uri: url, headers: { Accept: 'application/json' } };
+                http.get(reqParams, function (err, resp, body) {
+                    var userData = JSON.parse(body);
+                    console.log('Logado -> ' + userData.name);
+                    //item es el registro que vamos a insertar, le incluimos el nombre del usuario facebook
+                    item.autor = userData.name;
+                    
+                    request.execute();
+                });
+            }
+        });
+    } else {
+        //tenemos el nombre, asi que no lo hemos buscado
+        request.execute();
+    }
+}
