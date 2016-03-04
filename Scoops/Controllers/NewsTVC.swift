@@ -26,7 +26,7 @@ class NewsTVC: UITableViewController {
     
     //array del modelo de datos
     var model: [AnyObject]?
-    //genero un diccionario con la calve y la imagen, para que si ya esta no vovler a cargarla
+    //genero un diccionario con la clave y la imagen, para que si ya esta no vovler a cargarla. No es muy eficiente en cuanto a memoria, pero la historia es no volver a bajar la foto, lo suyo seria persistir los datos en coredata
     var modelblob = [String : AnyObject]()
     
 
@@ -202,21 +202,6 @@ class NewsTVC: UITableViewController {
         
     }
     
-//    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-//        print("seleccionan el \(indexPath.row)")
-//        performSegueWithIdentifier("showNewsDetail", sender: indexPath.row)
-//    }
-    
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    
     // MARK: - Borrar celdas
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         //si estoy en modo lector no puedo borrar cledas, ya que no son mias, es lo que esta publicado
@@ -242,9 +227,7 @@ class NewsTVC: UITableViewController {
             
             tableView.endUpdates()
         }
-//        else if editingStyle == .Insert {
-//            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-//        }    
+  
     }
 
 
@@ -280,9 +263,7 @@ class NewsTVC: UITableViewController {
     }
     
     @IBAction func SwapBetweenReaderAndWriter(sender: AnyObject) {
-        
-        
-        
+
         //cambio el valor del lector
         iAmReader = !iAmReader
         

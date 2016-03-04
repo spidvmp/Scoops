@@ -452,8 +452,6 @@ extension ReportVC : UIPickerViewDelegate {
             self.getValoracion(self.model!["id"] as! String, client: self.client)
             
         })
-
-
         pickerView.removeFromSuperview()
     }
 
@@ -461,13 +459,13 @@ extension ReportVC : UIPickerViewDelegate {
 
 extension ReportVC : MyLocationManagerDelegate {
     func newLocationFound(location: CLLocation) {
-        print("Tengo corrdenadas de la noticia")
+
         self.latitud = location.coordinate.latitude
         self.longitud = location.coordinate.longitude
     }
     
     func locationManagerFail() {
-        print("error con las coordeenadas")
+        //no hago nada ya que tengo controlado que si no tengo coordenadaas no pase nada
         
     }
 }
