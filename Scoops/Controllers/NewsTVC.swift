@@ -199,6 +199,7 @@ class NewsTVC: UITableViewController {
                 }
                 
             } else {
+                
                 client.loginWithProvider("facebook", controller: self, animated: true, completion: { (user: MSUser?, error: NSError?) -> Void in
                     
                     if (error != nil){
@@ -206,6 +207,7 @@ class NewsTVC: UITableViewController {
                     } else{
                         // Persistimos los credenciales del usuario
                         saveAuthInfo(user)
+                        
                     }
                 })
                 

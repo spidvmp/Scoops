@@ -221,7 +221,18 @@ class ReportVC: UIViewController {
             }
             
         } else {
-            //no estamos logados
+            //no estamos logados, lo intentamos
+            client.loginWithProvider("facebook", controller: self, animated: true, completion: { (user: MSUser?, error: NSError?) -> Void in
+                
+                if (error != nil){
+                    print("Tenemos Problemas")
+                } else{
+                    // Persistimos los credenciales del usuario
+                    saveAuthInfo(user)
+                    
+                }
+            })
+
             
         }
  
@@ -404,6 +415,7 @@ extension ReportVC : UIPickerViewDelegate {
         //estoy logado por cojones, asi que el numero de user lo grabo para saber cuales son mis publicaciones
         //no inseeto nada ane validacion, ya que siempre inicio con 0, asi que lo hago en el script de insertar
         //queda el script preparado para que si envio el autor no lo vuelva a buscar, de momento no lo implemento por tiempo
+        
         
         tablaValoracion?.insert(["valoracion": String(row + 1), "id_noticia": model!["id"] as! String], completion: { (inserted, error: NSError?) -> Void in
             if error != nil {

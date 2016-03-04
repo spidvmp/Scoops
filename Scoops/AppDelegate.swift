@@ -6,6 +6,7 @@
 //  Copyright © 2016 Vicente de Miguel. All rights reserved.
 //
 
+//notifiaciones push https://azure.microsoft.com/es-es/documentation/articles/mobile-services-javascript-backend-windows-store-dotnet-push-notifications-app-users/
 import UIKit
 
 @UIApplicationMain
