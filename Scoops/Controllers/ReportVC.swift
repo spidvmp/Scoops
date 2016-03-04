@@ -41,6 +41,8 @@ class ReportVC: UIViewController {
     
     //un bool para saber si se ha puesto foto o no, si no se ha puesto, pues no se sube
     var siTengoFoto : Bool = false
+    //si salgo para tomar una foto, al volver no hago nada en el willappear
+    var saliParaTomarFoto : Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,8 +59,10 @@ class ReportVC: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        //acabo de llegar, no tengo foto subida
-        self.siTengoFoto = false
+        if saliParaTomarFoto {
+            saliParaTomarFoto = false
+            return
+        }
         
         //solo muestro los datos si me han llegado
         if let _ = model {
@@ -96,6 +100,8 @@ class ReportVC: UIViewController {
             self.menuItemButton = UIBarButtonItem(title: "Subir Noticia", style: .Plain , target: self, action: "subirNoticia:" )
             self.navigationItem.rightBarButtonItem = self.menuItemButton!
             self.isEditingNews = true
+            //acabo de llegar, no tengo foto subida
+            self.siTengoFoto = false
             
             //añado el yapgesture a la foto
             self.tapPic = UITapGestureRecognizer(target: self, action: Selector("takeAPic:"))
@@ -284,6 +290,7 @@ class ReportVC: UIViewController {
     
     func takeAPic(sender: AnyObject){
         self.textoTV.endEditing(true)
+        saliParaTomarFoto = true
         let picker = UIImagePickerController()
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
             //tenemos camara

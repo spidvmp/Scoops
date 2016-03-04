@@ -26,7 +26,8 @@ class NewsTVC: UITableViewController {
     
     //array del modelo de datos
     var model: [AnyObject]?
-    var modelblob : [AZSCloudBlob]?
+    //genero un diccionario con la calve y la imagen, para que si ya esta no vovler a cargarla
+    var modelblob = [String : AnyObject]()
     
 
 
@@ -108,6 +109,49 @@ class NewsTVC: UITableViewController {
                         cell.detailTextLabel!.text = "No Publicado"
                 }
             }
+        }
+        
+        //me bajo la foto de la noticia
+        //estraigo el nombre de la imagen, que sera el id de la noticia
+        let img = news["id"] as! String
+        
+        if self.modelblob[img] != nil {
+            cell.imageView?.image = UIImage(data: self.modelblob[img] as! NSData)
+        } else {
+            //me bajo la noticia
+            //me bajo la foto, si da error es que no existe, no pasa nada
+            
+            client.invokeAPI(kAPIName, body: nil, HTTPMethod: "GET", parameters: ["blobName" : img, "containerName" : "imagenes"], headers: nil, completion: {(result: AnyObject?, response: NSHTTPURLResponse?, error: NSError? ) -> Void in
+                if error == nil {
+                    //no hubo error, asi que tenemos foto
+                    //aqui tenemos la url del blobpara usar
+                    let sasURL = result!["sasUrl"] as? String
+                    //creamos el contenedor a partir de esta sas
+                    let endPoint = kEndpointAzureStorage + sasURL!
+                    //refernecia del container
+                    let container = AZSCloudBlobContainer(url: NSURL(string: endPoint)!)
+                    //creamos el blob local para que me permita subir el blob
+                    let blobLocal = container.blockBlobReferenceFromName(img)
+                    //bajamos la foto
+                    
+                    blobLocal.downloadToDataWithCompletionHandler({ (error: NSError?, result: NSData?) -> Void in
+                        if error == nil {
+                            //se ha bajado la foto
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                
+                                cell.imageView?.image  = UIImage(data: result!)
+                                //guardo la imagen comodata en el modelo
+                                self.modelblob[img] = result
+                                //ahora muestro otra vez la celda,ya que ha de mostrar la imagen
+                                tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+
+                            })
+                        }
+                    })
+                } else {
+                    //error, hay que pensar que no existe el blob, asi que no se pone la foto
+                }
+            })
         }
         
 
