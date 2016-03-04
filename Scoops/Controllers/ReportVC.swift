@@ -7,6 +7,7 @@
 //
 //https://azure.microsoft.com/es-es/documentation/articles/mobile-services-ios-how-to-use-client-library/
 import UIKit
+import CoreLocation
 
 class ReportVC: UIViewController {
     
@@ -24,6 +25,11 @@ class ReportVC: UIViewController {
     
     //modelo de noticia que se ha seleccionado, pero viene capado, hay que volver a consultar todo el modelo completo
     var model : AnyObject?
+    //necesito la latitud y longitud de la noticia
+    var latitud : Double?
+    var longitud: Double?
+    //posicionamiento
+    var position = Position.sharedInstance
     
     //me quedo con un bool para saber si es edicion o es uno mnuevo
     var isEditingNews : Bool! = false
@@ -38,7 +44,7 @@ class ReportVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        position.delegate = self
 
 
         // Do any additional setup after loading the view.
@@ -95,6 +101,12 @@ class ReportVC: UIViewController {
             self.tapPic = UITapGestureRecognizer(target: self, action: Selector("takeAPic:"))
             self.foto.userInteractionEnabled = true
             self.foto.addGestureRecognizer(tapPic!)
+            
+            //inicializo las coordenadas a nil
+            self.latitud = nil
+            self.longitud = nil
+            //lanzo la localizacion
+            position.getPosition()
             updateUI()
         }
         
@@ -204,7 +216,15 @@ class ReportVC: UIViewController {
                 //no inseeto nada ane validacion, ya que siempre inicio con 0, asi que lo hago en el script de insertar
                 //queda el script preparado para que si envio el autor no lo vuelva a buscar, de momento no lo implemento por tiempo
                 
-                tablaNoticias?.insert(["titulo": tituloTF.text!, "texto": textoTV.text!, "estado": "NP", "user":usrlogin.usr], completion: { (inserted, error: NSError?) -> Void in
+                var params = ["titulo": tituloTF.text!, "texto": textoTV.text!, "estado": "NP", "user":usrlogin.usr]
+                if let lat = self.latitud,
+                    let lon = self.longitud {
+                        params["lat"] = String(lat)
+                        params["lon"] = String(lon)
+                }
+                
+                
+                tablaNoticias?.insert(params, completion: { (inserted, error: NSError?) -> Void in
                     if error != nil {
                         print ("Error al insertar noticia: \(error)")
                     } else {
@@ -430,4 +450,17 @@ extension ReportVC : UIPickerViewDelegate {
         pickerView.removeFromSuperview()
     }
 
+}
+
+extension ReportVC : MyLocationManagerDelegate {
+    func newLocationFound(location: CLLocation) {
+        print("Tengo corrdenadas de la noticia")
+        self.latitud = location.coordinate.latitude
+        self.longitud = location.coordinate.longitude
+    }
+    
+    func locationManagerFail() {
+        print("error con las coordeenadas")
+        
+    }
 }
