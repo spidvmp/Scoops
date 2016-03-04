@@ -14,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     //genero las credenciales para conectarme a Azure
-    //let client = getMSClient()
+    let client = getMSClient()
     
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
@@ -23,52 +23,45 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
         
-//        //esto es para recibir notificaciones
-//        let notificationSettings = UIUserNotificationSettings(forTypes: [.Sound, .Alert, .Badge], categories: nil )
-//        UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
-//        UIApplication.sharedApplication().registerForRemoteNotifications()
+        //esto es para recibir notificaciones
+        let notificationSettings = UIUserNotificationSettings(forTypes: [.Sound, .Alert, .Badge], categories: nil )
+        UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
+        UIApplication.sharedApplication().registerForRemoteNotifications()
         
-        
-        //pongo un registro  a mano para probar
-//        let item = ["titulo":"Dios!!", "texto":"Pues esta el panorama como para descuidarse","autor":"Anonimo","estado":"editando","user":"yo"]
-//        let table = client.tableWithName("Noticias")
-//        table.insert(item) {
-//            (insertedItem, error : NSError?) in
-//            print("Tenemos noticias")
-//            if error != nil {
-//                print("Error" + error!.description);
-//            } else {
-//                print("Item inserted, id: \( insertedItem["id"])")
-//            }
-//        }
+
         return true
     }
 
     //MARK: - Metodos de notificaciones
-//    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
-//        
-//        client.push.registerNativeWithDeviceToken(deviceToken, tags: nil) { (error: NSError?) -> Void in
-//            
-//            if error != nil {
-//                
-//                print("Error -> \(error)")
-//            }
-//        }
+    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
+        
+        client.push.registerNativeWithDeviceToken(deviceToken, tags: nil) { (error: NSError?) -> Void in
+            
+            if error != nil {
+                
+                print("Error -> \(error)")
+            }
+        }
+        
+        
+    }
+    
+    func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
+        print("Error al registrar la notificacion: \(error)")
+    }
+    
+    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+        let payload = userInfo as Dictionary
+        print(payload)
+        
+        
+    }
+//    este metodo es para notificaciones silenciosas, en segundo plano
+//    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
 //        
 //        
 //    }
-//    
-//    func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
-//        
-//    }
-//    
-//    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
-//        let payload = userInfo as Dictionary
-//        print(payload)
-//        
-//        
-//    }
-//    
+    
     
     
     
