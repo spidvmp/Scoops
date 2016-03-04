@@ -242,7 +242,8 @@ class NewsTVC: UITableViewController {
                     //guardamos las cerdenciales de logado en client.currentUser
                     client.currentUser = MSUser(userId: usrlogin.usr)
                     client.currentUser.mobileServiceAuthenticationToken = usrlogin.tok
-                    
+                    //He de recargar la tabla xq hay que cambiar los datos, sera o las noticias o mis noticas escritas
+                    self.populateModel()
                 }
                 
             } else {
@@ -254,6 +255,8 @@ class NewsTVC: UITableViewController {
                     } else{
                         // Persistimos los credenciales del usuario
                         saveAuthInfo(user)
+                        //He de recargar la tabla xq hay que cambiar los datos, sera o las noticias o mis noticas escritas
+                        self.populateModel()
                         
                     }
                 })
@@ -271,12 +274,14 @@ class NewsTVC: UITableViewController {
         if iAmReader {
             //pongo la opcion para irse a escritor
             self.readerButton.title = "Mis Noticias"
+            //He de recargar la tabla xq hay que cambiar los datos, sera o las noticias o mis noticas escritas
+            populateModel()
+
         } else {
             logarse()
             self.readerButton.title = "Noticias"
         }
-        //He de recargar la tabla xq hay que cambiar los datos, sera o las noticias o mis noticas escritas
-        populateModel()
+        
     }
     
     // MARK: - Navigation
