@@ -1,6 +1,14 @@
 function insert(item, user, request) {
 
-    if ( typeof item.autor == 'undefined' ) {
+   //comprobamos que tiene titulo y noticia, si no no insertamos
+   if ((item.titulo == '') || ( item.texto == '')) {
+       //uno de los 2 esta vacio
+       console.log("Falta algo. T=" + item.titulo + " N=" + item.texto);
+       //devuelvo que ha ido bien, pero con error
+       request.respond(200,{'error':'vacio'});
+   } else {
+    //se supone correcto, comprobamos si tenemos autor
+     if ( typeof item.autor == 'undefined' ) {
         //no tenemos el nombre, lo vamos a buscar
         user.getIdentities({
             success: function (identities) {
@@ -20,8 +28,9 @@ function insert(item, user, request) {
                 });
             }
         });
-    } else {
-        //tenemos el nombre, asi que no lo hemos buscado
+     } else {
+        //tenemos el autor, asi que no lo hemos buscado
         request.execute();
     }
+  }
 }

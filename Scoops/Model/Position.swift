@@ -74,6 +74,7 @@ class Position : NSObject , CLLocationManagerDelegate {
 
             //si tengo delegate, le paso los parametros que tengo
             if ((self.delegate != nil) && (self.delegate?.respondsToSelector(Selector("newLocationFound:")))!){
+                //si peta aqui, pon unalocalizacion en el simulador
                 self.delegate?.newLocationFound(self.myPosition!)
             }
             

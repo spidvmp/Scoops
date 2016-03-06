@@ -234,16 +234,40 @@ class ReportVC: UIViewController {
                     if error != nil {
                         print ("Error al insertar noticia: \(error)")
                     } else {
-                        //ha insertado. genero los datos en el modelo, ya que ahora se puede publicar y necesito los datos en model
-                        self.model = inserted
-                        //ahora subo la foto, como parametro mando el id del registro que ha insertado
-                        self.uploadPic(inserted["id"] as! String)
+                        //hay que comprobar si me han enviado {error:vacio}
+                        if let _ = inserted["error"] {
+                            //muestro una alerta
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                let actionSheetController: UIAlertController = UIAlertController(title: "Error", message: "Debes rellenar el titulo y la noticia", preferredStyle: .ActionSheet)
+                                let cancelAction: UIAlertAction = UIAlertAction(title: "Ok", style: .Cancel , handler: nil)
+                                actionSheetController.addAction(cancelAction)
+                                self.presentViewController(actionSheetController, animated: true, completion: nil)
+                                
+//                                //Create and add the Cancel action
+//                                let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel) { action -> Void in
+//
+//                                
+//                                
+//                                
+                            })
+                            
+                        } else {
+                            //ha insertado. genero los datos en el modelo, ya que ahora se puede publicar y necesito los datos en model
+                            self.model = inserted
+                            //ahora subo la foto, como parametro mando el id del registro que ha insertado
+                            self.uploadPic(inserted["id"] as! String)
+                            //cambio los botones para que se publique
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                //se ha subido la noticia, ahora queda la opcion de publicarla o no
+                                self.menuItemButton!.title = "Publicar"
+                                self.menuItemButton!.action = "clickPublicar:"
+                            })
+                            
+                        }
                     }
                 })
                 
-                //se ha subido la noticia, ahora queda la opcion de publicarla o no
-                self.menuItemButton!.title = "Publicar"
-                self.menuItemButton!.action = "clickPublicar:"
+                
             }
             
         } else {
